@@ -13,6 +13,8 @@ const webpackConfig = {
     ]
   },
 
+  target: 'electron-renderer',
+
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
   },
@@ -30,10 +32,10 @@ const webpackConfig = {
         loader: ['ts-loader'],
         exclude: /node_modules/
       },
-      {
-        test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
-      }
+      // {
+      //   test: /\.css$/,
+      //   loaders: ['style-loader', 'css-loader'],
+      // }
     ]
   },
   plugins: [
