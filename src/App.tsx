@@ -1,22 +1,15 @@
-// import * as React from "react";
-
-// export interface AppProps {
-//   compiler: string;
-//   framework: string;
-// }
-
-// export const App = (props: AppProps) => <h1>Hello2222 from { props.compiler } and { props.framework }!</h1>;
-
-
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
-import { fuzzyMatch } from './util/';
+import { fuzzyMatch2 } from './util/';
 import SearchResult from './SearchResult';
+import { ListItemInterface } from './Interfaces';
 
-const originData = remote.getGlobal('sharedObject').originData;
+const originData: Array<ListItemInterface> = remote.getGlobal('sharedObject').originData;
+const { fuzzyList } = fuzzyMatch2;
 
-class App extends React.Component<any, any> {
-  constructor(props: any) {
+
+class App extends React.Component<{}, any> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       value: '',
@@ -51,10 +44,8 @@ class App extends React.Component<any, any> {
   }
 
   handleChange(event: any) {
-    // console.log(event.target.value);
-    let ret = event.target.value.trim() === '' ? [] : fuzzyMatch.fuzzyList(event.target.value, originData, this.state.mode);
-    // console.log(ret);
-    // console.log(ret.length);
+    let ret = event.target.value.trim() === '' ? [] : fuzzyList(event.target.value, originData, this.state.mode);
+
     this.setState({
       value: event.target.value,
       result: ret

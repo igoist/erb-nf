@@ -1,21 +1,13 @@
 import * as React from 'react';
 import * as util from './util/';
+import { SearchResultProps, SearchResultState } from './Interfaces';
 
-const { scroll } = util;
 
-interface Props {
-  value: string,
-  arr: Array<any>,
-  originData: any
-}
+const { scroll2 } = util;
+const scroll = scroll2;
 
-interface StateProps {
-  targetIndex: number,
-  current?: number
-}
-
-class SearchResult extends React.Component<Props, StateProps> {
-  constructor(props: any) {
+class SearchResult extends React.Component<SearchResultProps, SearchResultState> {
+  constructor(props: SearchResultProps) {
     super(props);
     this.state = {
       targetIndex: 0,
@@ -24,7 +16,6 @@ class SearchResult extends React.Component<Props, StateProps> {
   }
 
   componentDidMount() {
-    // console.log('init');
     window.addEventListener('keydown', (e) => {
       // console.log('The key code is: ' + e.keyCode);
 
@@ -54,7 +45,7 @@ class SearchResult extends React.Component<Props, StateProps> {
     });
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: SearchResultProps) {
     if (prevProps.value !== this.props.value) {
       this.setState({
         targetIndex: 0,

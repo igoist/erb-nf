@@ -1,6 +1,6 @@
 # erb-nf
 
-* 使用 electron-react-boilerplate(erb) 对原项目进行简单复刻，并且之后将在此基础上继续开发 *
+*使用 electron-react-boilerplate(erb) 对原项目进行简单复刻，并且之后将在此基础上继续开发*
 
 
 ## electron-react-boilerplate
