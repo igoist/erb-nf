@@ -1,15 +1,27 @@
 // ...
 export interface ListItemInterface {
-  date: string,
-  title: string,
-  link: string
+  title?: string,
+  link?: string
+  date?: string,
+  name?: string,
+  mode?: number
+}
+
+// App
+export interface AppState {
+  value: string,
+  data: Array<any>,
+  result: Array<any>,
+  mode: number
 }
 
 // SearchResult部分
 export interface SearchResultProps {
   value: string,
   arr: Array<any>,
-  originData: any
+  originData: Array<any>,
+  mode: number,
+  handleState(mode: number): void;
 }
 
 export interface SearchResultState {

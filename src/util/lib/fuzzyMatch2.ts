@@ -27,7 +27,6 @@ const fuzzyMatches = (fuzzy: string, text: string) => {
 
 
 const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
-  // console.log(list);
   const results = [];
 
   for (let i = 0; i < list.length; i++) {
@@ -35,12 +34,14 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
 
     let item;
     if (mode === 0) {
-      item = list[i].title;
+      item = list[i].name;
     }
     if (mode === 1) {
+      item = list[i].title;
+    }
+    if (mode === 2) {
       item = list[i].link;
     }
-
     const matches = fuzzyMatches(fuzzy, item);
 
     if (matches.length === fuzzy.length) {

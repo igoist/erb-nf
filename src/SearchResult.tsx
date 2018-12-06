@@ -38,10 +38,13 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
         });
       }
       // 因为是全局绑定的 keydown，输入文字会有问题
-      // if (e.keyCode === 13) {
-      //   const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
-      //   console.log(item.date, item.link);
-      // }
+      if (e.keyCode === 13) {
+        if (this.props.arr.length) {
+          const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
+          // console.log(item.date, item.link);
+          console.log(item);
+        }
+      }
     });
   }
 
@@ -63,17 +66,22 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
   }
 
   handleItemClick(item: any, index: number) {
-    const { originData } = this.props;
-    // console.log(item);
-    // console.log(originData[item.originalIndex].date);
-    console.log(originData[item.originalIndex].title);
-    console.log(originData[item.originalIndex].link);
-    console.log(scroll.returnCurrent(this.state.current, index));
-
-    this.setState({
-      targetIndex: index,
-      current: scroll.returnCurrent(this.state.current, index)
-    });
+    const { originData, mode, handleState } = this.props;
+    if (mode === 0) {
+      console.log(originData[item.originalIndex].name);
+      console.log(originData[item.originalIndex].mode);
+      handleState(originData[item.originalIndex].mode);
+    } else {
+      // console.log(item);
+      // console.log(originData[item.originalIndex].date);
+      console.log(originData[item.originalIndex].title);
+      console.log(originData[item.originalIndex].link);
+      console.log(scroll.returnCurrent(this.state.current, index));
+      this.setState({
+        targetIndex: index,
+        current: scroll.returnCurrent(this.state.current, index)
+      });
+    }
   }
 
   render() {

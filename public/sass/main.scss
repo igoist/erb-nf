@@ -65,7 +65,6 @@ $itemHeight: 56px;
         width: 32px;
         height: 32px;
         color: #149cec;
-        background-image: url(../img/search.svg);
         background-size: 32px;
         background-repeat: no-repeat;
         cursor: pointer;
@@ -73,11 +72,32 @@ $itemHeight: 56px;
     }
   }
 
-  &.toggle {
+
+  &.mode-0 {
     .searchBar-searchIcon {
       span {
         &:before {
           background-image: url(../img/programming.png);
+        }
+      }
+    }
+  }
+
+  &.mode-1 {
+    .searchBar-searchIcon {
+      span {
+        &:before {
+          background-image: url(../img/search.svg);
+        }
+      }
+    }
+  }
+
+  &.mode-2 {
+    .searchBar-searchIcon {
+      span {
+        &:before {
+          background-image: url(../img/music.png);
         }
       }
     }
