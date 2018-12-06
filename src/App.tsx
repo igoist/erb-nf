@@ -41,6 +41,8 @@ const handleModeChange = (mode: number) => {
 
 
 class App extends React.Component<{}, AppState> {
+  private searchInput = React.createRef<HTMLInputElement>();
+
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -69,6 +71,15 @@ class App extends React.Component<{}, AppState> {
       // const myNotification = new window.Notification(notification.title, notification);
 
       this.setState((state: AppState) => handleModeChange(state.mode));
+    });
+
+    ipcRenderer.on('foucs-toggle', () => {
+      console.log(this.searchInput);
+      if (this.searchInput.current === document.activeElement) {
+        this.searchInput.current.blur();
+      } else {
+        this.searchInput.current.focus();
+      }
     });
   }
 
@@ -113,7 +124,7 @@ class App extends React.Component<{}, AppState> {
     return (
       <div>
         <div id='inputWrapper'>
-          <input id='searchInput' value={ value } onChange={ this.handleChange } />
+          <input id='searchInput' value={ value } onChange={ this.handleChange } ref={ this.searchInput } />
           <div className={ `inputAfter mode-${ mode }` } onClick={ this.handleClick }>
             <button aria-label='搜索' type='button' className='btn searchBar-searchIcon Button--primary'>
               <span></span>

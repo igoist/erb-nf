@@ -98,6 +98,9 @@ function createWindow () {
       hideOrShowWin(true);
     }
   });
+  globalShortcut.register('Alt+S', () => {
+    win.webContents.send('foucs-toggle');
+  });
   globalShortcut.register('CmdOrCtrl+Y', () => {
     console.log('CmdOrCtrl+Y');
 
@@ -113,10 +116,10 @@ function createWindow () {
     tmpWin.setOpacity(0.8);
     tmpWin.loadURL(modalPath);
     tmpWin.show();
-    setTimeout(() => {
-      tmpWin.center();
-    }, 1000);
-    console.log(tmpWin.isMovable());
+    // setTimeout(() => {
+    //   tmpWin.center();
+    // }, 1000);
+    // console.log(tmpWin.isMovable());
   });
   globalShortcut.register('Ctrl+M', () => {
     win.webContents.send('mode-change');
