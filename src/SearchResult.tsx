@@ -6,6 +6,7 @@ import { SearchResultProps, SearchResultState } from './Interfaces';
 const { scroll2 } = util;
 const scroll = scroll2;
 
+
 class SearchResult extends React.Component<SearchResultProps, SearchResultState> {
   constructor(props: SearchResultProps) {
     super(props);
@@ -15,37 +16,44 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
     };
   }
 
-  componentDidMount() {
-    window.addEventListener('keydown', (e) => {
-      // console.log('The key code is: ' + e.keyCode);
+  handleKeyDown = (e: any) => {
+    // console.log(this);
+    // console.log('The key code is: ' + e.keyCode);
 
-      if ((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) {
-        this.setState((state, props) => {
-          const newTargetIndex = state.targetIndex + 1 > props.arr.length - 1 ? state.targetIndex : state.targetIndex + 1;
-          return {
-            targetIndex: newTargetIndex,
-            current: scroll.returnCurrent(this.state.current, newTargetIndex)
-          }
-        });
-      }
-      if ((e.keyCode === 75 && e.ctrlKey) || e.keyCode === 38) {
-        this.setState((state) => {
-          const newTargetIndex = state.targetIndex > 0 ? state.targetIndex - 1 : 0;
-          return {
-            targetIndex: newTargetIndex,
-            current: scroll.returnCurrent(this.state.current, newTargetIndex)
-          }
-        });
-      }
-      // 因为是全局绑定的 keydown，输入文字会有问题
-      if (e.keyCode === 13) {
-        if (this.props.arr.length) {
-          const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
-          // console.log(item.date, item.link);
-          console.log(item);
+    if ((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) {
+      this.setState((state: SearchResultState, props: SearchResultProps) => {
+        const newTargetIndex = state.targetIndex + 1 > props.arr.length - 1 ? state.targetIndex : state.targetIndex + 1;
+        return {
+          targetIndex: newTargetIndex,
+          current: scroll.returnCurrent(this.state.current, newTargetIndex)
         }
+      });
+    }
+    if ((e.keyCode === 75 && e.ctrlKey) || e.keyCode === 38) {
+      this.setState((state: SearchResultState) => {
+        const newTargetIndex = state.targetIndex > 0 ? state.targetIndex - 1 : 0;
+        return {
+          targetIndex: newTargetIndex,
+          current: scroll.returnCurrent(this.state.current, newTargetIndex)
+        }
+      });
+    }
+    // 因为是全局绑定的 keydown，输入文字会有问题
+    if (e.keyCode === 13) {
+      if (this.props.arr.length) {
+        const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
+        // console.log(item.date, item.link);
+        console.log(item);
       }
-    });
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   componentDidUpdate(prevProps: SearchResultProps) {
