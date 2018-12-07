@@ -9,6 +9,7 @@ const srcPath = './src';
 const webpackConfig = {
   entry: {
     index: [
+      'react-hot-loader/patch',
       path.resolve(path.resolve(__dirname, '..'), path.resolve(srcPath, 'index.tsx'))
     ]
   },
@@ -29,7 +30,7 @@ const webpackConfig = {
     rules: [
       {
         test: /\.(ts|tsx)?$/,
-        loader: ['ts-loader'],
+        loader: ['babel-loader', 'ts-loader'],
         exclude: /node_modules/
       },
       // {
