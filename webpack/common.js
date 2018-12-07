@@ -33,10 +33,21 @@ const webpackConfig = {
         loader: ['babel-loader', 'ts-loader'],
         exclude: /node_modules/
       },
-      // {
-      //   test: /\.css$/,
-      //   loaders: ['style-loader', 'css-loader'],
-      // }
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpg|svg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
+      }
     ]
   },
   plugins: [
