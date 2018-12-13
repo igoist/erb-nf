@@ -2,12 +2,14 @@ import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
 import { fuzzyMatch2 } from './util/';
 import SearchResult from './SearchResult';
+import AudioPlayer from './AudioPlayer';
+import VideoPlayer from './VideoPlayer';
 import { ListItemInterface, AppState } from './Interfaces';
 
 const originData: Array<ListItemInterface> = remote.getGlobal('sharedObject').originData;
 const { fuzzyList } = fuzzyMatch2;
 
-const tmpData = [
+const AppArr = [
   {
     name: 'Apps',
     mode: 0
@@ -24,13 +26,13 @@ const tmpData = [
 
 const handleModeChange = (mode: number) => {
   let newMode = mode + 1;
-  if (newMode === 3) {
+  if (newMode === AppArr.length) {
     newMode = 0;
   }
   if (newMode === 0) {
     return {
       mode: newMode,
-      data: tmpData
+      data: AppArr
     }
   }
   return {
@@ -59,7 +61,7 @@ class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     this.setState({
-      data: tmpData
+      data: AppArr
     });
 
     ipcRenderer.on('mode-change', (event: any, arg: any) => {
@@ -102,7 +104,7 @@ class App extends React.Component<{}, AppState> {
     if (mode === 0) {
       tmp = {
         mode: mode,
-        data: tmpData
+        data: AppArr
       }
     } else {
       tmp = {
@@ -118,8 +120,12 @@ class App extends React.Component<{}, AppState> {
   render() {
     const { value, data, result, mode } = this.state;
     const arr = result;
-    ipcRenderer.send('change-win', { listHeight: arr.length > 10 ? 10 : arr.length });
-    console.log(arr.length, value);
+    if (mode !== (AppArr.length - 1)) {
+      ipcRenderer.send('change-win', { listHeight: arr.length > 10 ? 10 : arr.length });
+      console.log(arr.length, value);
+    } else {
+      ipcRenderer.send('change-win', { listHeight: 1 });
+    }
 
     return (
       <div>
@@ -131,13 +137,21 @@ class App extends React.Component<{}, AppState> {
             </button>
           </div>
         </div>
-        <SearchResult
-          value={ value }
-          arr={ arr }
-          originData={ data }
-          mode={ mode }
-          handleState={ this.handleState }
-        />
+        {
+          mode !== (AppArr.length - 1) ? (
+            <SearchResult
+              value={ value }
+              arr={ arr }
+              originData={ data }
+              mode={ mode }
+              handleState={ this.handleState }
+            />
+          ) : (
+            <VideoPlayer />
+            // <AudioPlayer />
+          )
+        }
+
       </div>
     );
   }

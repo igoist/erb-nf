@@ -1,9 +1,9 @@
 // ...
 export interface ListItemInterface {
-  title?: string,
+  title?: string
   link?: string
-  date?: string,
-  name?: string,
+  date?: string
+  name?: string
   mode?: number
 }
 
