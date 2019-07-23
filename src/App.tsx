@@ -24,21 +24,32 @@ const AppArr = [
   }
 ];
 
+const handleSwitch = (mode: number) => {
+  switch (mode) {
+    case 0:
+      return {
+        mode,
+        data: AppArr
+      };
+    case 1:
+      return {
+        mode,
+        data: originData
+      };
+    default:
+      return {
+        mode,
+        data: originData
+      };
+  }
+}
+
 const handleModeChange = (mode: number) => {
   let newMode = mode + 1;
   if (newMode === AppArr.length) {
     newMode = 0;
   }
-  if (newMode === 0) {
-    return {
-      mode: newMode,
-      data: AppArr
-    }
-  }
-  return {
-    mode: newMode,
-    data: originData
-  };
+  return handleSwitch(newMode);
 };
 
 
@@ -101,17 +112,7 @@ class App extends React.Component<{}, AppState> {
 
   handleState(mode: number) {
     let tmp: any;
-    if (mode === 0) {
-      tmp = {
-        mode: mode,
-        data: AppArr
-      }
-    } else {
-      tmp = {
-        mode: mode,
-        data: originData
-      };
-    }
+    tmp = handleSwitch(mode);
     tmp.value = '';
     tmp.result = [];
     this.setState(tmp);
