@@ -17,6 +17,9 @@ const webpackConfig = {
   target: 'electron-renderer',
 
   resolve: {
+    alias: {
+      '@Models': path.resolve(path.resolve(__dirname, '..'), 'src/models/'),
+    },
     extensions: ['.ts', '.tsx', '.js']
   },
 

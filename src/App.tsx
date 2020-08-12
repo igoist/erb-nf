@@ -6,10 +6,12 @@ import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
 import { ListItemInterface, AppState } from './Interfaces';
 
+const { useState, useEffect, useRef } = React;
+
 const originData: Array<ListItemInterface> = remote.getGlobal('sharedObject').originData;
 const { fuzzyList } = fuzzyMatch2;
 
-const AppArr = [
+const AppArr: any = [
   {
     name: 'Apps',
     mode: 0
@@ -52,8 +54,92 @@ const handleModeChange = (mode: number) => {
   return handleSwitch(newMode);
 };
 
+const App = () => {
+  const searchInput = useRef(null);
+  const [value, setValue] = useState('');
+  const [data, setData] = useState(AppArr);
+  const [result, setResult] = useState([]);
+  const [mode, setMode] = useState(0);
 
-class App extends React.Component<{}, AppState> {
+  const handleChange = (event: any) => {
+    let ret = event.target.value.trim() === '' ? [] : fuzzyList(event.target.value, data, mode);
+    setValue(event.target.value);
+    setResult(ret);
+  }
+
+  const handleClick = () => {
+    // !!! Type
+    console.log('current: ', mode, typeof mode);
+    const handled = handleModeChange(mode);
+    console.log('enter handleClick', handled);
+    setData(handled.data);
+    setMode(handled.mode);
+  }
+
+  const handleState = (mode: number) => {
+    let tmp: any = handleSwitch(mode);
+    tmp.value = '';
+    tmp.result = [];
+  }
+
+  useEffect(() => {
+    const s = () => {
+      console.log('sss: ', mode, value);
+    }
+    ipcRenderer.on('mode-change', (event: any, arg: any) => {
+      // const handled = handleModeChange(mode);
+      // setData(handled.data);
+      // setMode(handled.mode);
+      s();
+    });
+
+    ipcRenderer.on('foucs-toggle', () => {
+      console.log(searchInput);
+      if (searchInput.current === document.activeElement) {
+        searchInput.current.blur();
+      } else {
+        searchInput.current.focus();
+      }
+    });
+  }, []);
+
+  if (mode !== (AppArr.length - 1)) {
+    ipcRenderer.send('change-win', { listHeight: result.length > 10 ? 10 : result.length });
+    console.log(result.length, value);
+  } else {
+    ipcRenderer.send('change-win', { listHeight: 1 });
+  }
+
+  return (
+    <div>
+      <div id='inputWrapper'>
+        <input id='searchInput' value={ value } onChange={ handleChange } ref={ searchInput } />
+        <div className={ `inputAfter mode-${ mode }` } onClick={ handleClick }>
+          <button aria-label='搜索' type='button' className='btn searchBar-searchIcon Button--primary'>
+            <span></span>
+          </button>
+        </div>
+      </div>
+      {
+        mode !== (AppArr.length - 1) ? (
+          <SearchResult
+            value={ value }
+            arr={ result }
+            originData={ data }
+            mode={ mode }
+            handleState={ handleState }
+          />
+        ) : (
+          <VideoPlayer />
+          // <AudioPlayer />
+        )
+      }
+    </div>
+  );
+};
+
+
+class AppO extends React.Component<{}, AppState> {
   private searchInput = React.createRef<HTMLInputElement>();
 
   constructor(props: {}) {
@@ -152,7 +238,6 @@ class App extends React.Component<{}, AppState> {
             // <AudioPlayer />
           )
         }
-
       </div>
     );
   }

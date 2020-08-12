@@ -5,7 +5,12 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "@Models": ["src/models/"],
+      "@Models/*": ["src/models/*"]
+    }
   },
   "include": [
     "./src/**/*"
