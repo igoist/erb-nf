@@ -5,20 +5,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const publicPath = '/';
 const srcPath = './src';
 
-
 const webpackConfig = {
   entry: {
-    index: [
-      'react-hot-loader/patch',
-      path.resolve(path.resolve(__dirname, '..'), path.resolve(srcPath, 'index.tsx'))
-    ]
+    index: ['react-hot-loader/patch', path.resolve(path.resolve(__dirname, '..'), path.resolve(srcPath, 'index.tsx'))]
   },
 
   target: 'electron-renderer',
 
   resolve: {
     alias: {
-      '@Models': path.resolve(path.resolve(__dirname, '..'), 'src/models/'),
+      '@Models': path.resolve(path.resolve(__dirname, '..'), 'src/models/')
     },
     extensions: ['.ts', '.tsx', '.js']
   },
@@ -33,12 +29,12 @@ const webpackConfig = {
     rules: [
       {
         test: /\.(ts|tsx)?$/,
-        loader: ['babel-loader', 'ts-loader'],
+        loader: ['babel-loader'],
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
+        loaders: ['style-loader', 'css-loader']
       },
       {
         test: /\.(png|jpg|svg|gif)$/,

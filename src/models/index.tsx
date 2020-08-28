@@ -1,1 +1,1 @@
-export { default as AppHook } from './AppHook';
+export { default as AppHook, AppArr } from './AppHook';

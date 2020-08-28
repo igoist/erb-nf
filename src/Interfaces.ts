@@ -22,6 +22,7 @@ export interface SearchResultProps {
   originData: Array<any>,
   mode: number,
   handleState(mode: number): void;
+  handleEnterKey?: any
 }
 
 export interface SearchResultState {

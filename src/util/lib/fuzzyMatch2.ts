@@ -1,6 +1,5 @@
 import { ListItemInterface } from '../../Interfaces';
 
-
 const fuzzyMatches = (fuzzy: string, text: string) => {
   fuzzy = fuzzy.toLowerCase();
   text = text.toLowerCase();
@@ -25,7 +24,6 @@ const fuzzyMatches = (fuzzy: string, text: string) => {
   return matches;
 };
 
-
 const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
   const results = [];
 
@@ -40,8 +38,12 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
       item = list[i].title;
     }
     if (mode === 2) {
+      item = list[i].title;
+    }
+    if (mode === 3) {
       item = list[i].link;
     }
+
     const matches = fuzzyMatches(fuzzy, item);
 
     if (matches.length === fuzzy.length) {
@@ -61,26 +63,49 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
         originalIndex,
         original: item,
         colored: t
-      })
+      });
     }
   }
 
   let i = 0;
   // sorts in-place
-  console.time('sort');
+  console.time('fuzzy sort');
   // replace it to quick sort later
   results.sort((a, b) => {
     i++;
     if (a.original < b.original) return -1;
     return 1;
   });
-  console.timeEnd('sort');
-  console.log('222sort end, i: ', i, 'results.length: ', results.length, ' list.length: ', list.length);
+  console.timeEnd('fuzzy sort');
+  console.log('fuzzy sort end, i: ', i, 'results.length: ', results.length, ' list.length: ', list.length);
   return results;
 };
 
-export {
-  fuzzyMatches,
-  fuzzyList,
-  ListItemInterface
-}
+const transformData = (data: Array<any>, mode: number) => {
+  let ret: Array<any> = [];
+  for (let i = 0; i < data.length; i++) {
+    let item;
+
+    if (mode === 0) {
+      item = data[i].name;
+    }
+    if (mode === 1) {
+      item = data[i].title;
+    }
+    if (mode === 2) {
+      item = data[i].title;
+    }
+    if (mode === 3) {
+      item = data[i].link;
+    }
+
+    ret.push({
+      originalIndex: i,
+      original: item,
+      colored: item
+    });
+  }
+  return ret;
+};
+
+export { fuzzyMatches, fuzzyList, transformData, ListItemInterface };

@@ -21,6 +21,35 @@ body {
 
 #inputWrapper {
   position: relative;
+
+  .spinner-wrap {
+    position: absolute;
+    top: 13px;
+    right: 50px;
+
+    .ex-spinner {
+      width: 32px;
+
+      & > div {
+        width: 6px;
+        height: 6px;
+        background-color: #fff;
+      }
+
+      .ex-spinner-bounce1,
+      .ex-spinner-bounce2 {
+        margin-right: 7px;
+      }
+    }
+
+    &.shutdown {
+      display: none;
+
+      .ex-spinner > div {
+        animation-play-state: paused;
+      }
+    }
+  }
 }
 
 $itemHeight: 56px;
@@ -167,4 +196,7 @@ $itemHeight: 56px;
   }
 }
 
-@import './components/media';
+@import './components/_loading';
+@import './components/_media';
+
+

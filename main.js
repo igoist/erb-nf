@@ -1,13 +1,20 @@
 const fs = require('fs');
 const path = require('path');
 const { ipcMain, app, BrowserWindow, globalShortcut, Menu, Tray } = require('electron');
+const { exec } = require('child_process');
+const child_process = require('child_process');
+function pbcopy(data) {
+  child_process.spawn('pbcopy');
+  proc.stdin.write(data);
+  proc.stdin.end();
+}
 
 const winWidth = 800;
 const winHeightUnit = 56;
 let win = null;
 let winFlag = true;
 
-const hideOrShowWin = ifShow => {
+const hideOrShowWin = (ifShow) => {
   if (ifShow) {
     win.show();
     winFlag = true;
@@ -15,9 +22,9 @@ const hideOrShowWin = ifShow => {
     win.hide();
     winFlag = false;
   }
-}
+};
 
-function createWindow () {
+function createWindow() {
   // 创建浏览器窗口
   win = new BrowserWindow({
     width: winWidth,
@@ -30,7 +37,10 @@ function createWindow () {
     // backgroundColor: '#80FFFFFF',
     // transparent: true,
     frame: false,
-    resizable: false
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   // 然后加载应用的 index.html。
@@ -39,10 +49,10 @@ function createWindow () {
 
   // =========================
   // Tray 文件盒；托盘；隔底匣；（无线电的）发射箱
-  const iconName = 'iconTemplate.png' // process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
+  const iconName = 'iconTemplate.png'; // process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
   console.log(path.join(__dirname, 'public/img'));
-  const iconPath = path.join(path.join(__dirname, 'public/img'), iconName)
-  appIcon = new Tray(iconPath)
+  const iconPath = path.join(path.join(__dirname, 'public/img'), iconName);
+  appIcon = new Tray(iconPath);
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -61,7 +71,7 @@ function createWindow () {
         app.quit();
       }
     }
-  ])
+  ]);
 
   appIcon.setToolTip('Electron Demo in the tray.');
   appIcon.setContextMenu(contextMenu);
@@ -74,14 +84,25 @@ function createWindow () {
       originData: tmp
     };
   });
+
   ipcMain.on('change-win', (event, arg) => {
     win.setSize(winWidth, winHeightUnit * (arg.listHeight + 1));
   });
 
-  // 打开开发者工具
-  win.webContents.openDevTools();
+  ipcMain.on('open-tab', (event, arg) => {
+    exec(`/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --incognito ${arg.link}`, (err, stdout, stderr) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(`${stdout}${arg.link}${stderr ? ' --' + stderr : ''}`);
+    });
+  });
 
-  win.on('close', e => {
+  // 打开开发者工具
+  // win.webContents.openDevTools();
+
+  win.on('close', (e) => {
     console.log('app.quitting? ', app.quitting);
     if (app.quitting) {
       win = null;
@@ -101,6 +122,18 @@ function createWindow () {
   globalShortcut.register('Alt+S', () => {
     win.webContents.send('foucs-toggle');
   });
+  // globalShortcut.register('Cmd+C', () => {
+  //   exec('pbcopy', (err, stdout, stderr) => {
+  //     if (err) {
+  //       console.log('here');
+  //       return ;
+  //     }
+
+  //     console.log(`stdout: ${stdout}`);
+  //     console.log(`stderr: ${stderr}`);
+  //   });
+  //   // return false;
+  // });
   globalShortcut.register('CmdOrCtrl+Y', () => {
     console.log('CmdOrCtrl+Y');
 
@@ -109,10 +142,16 @@ function createWindow () {
       width: 76,
       height: 76,
       frame: false,
-      resizable: false
+      skipTaskbar: true,
+      resizable: true,
+      webPreferences: {
+        nodeIntegration: true
+      }
     });
 
-    tmpWin.on('close', () => { tmpWin = null });
+    tmpWin.on('close', () => {
+      tmpWin = null;
+    });
     tmpWin.setOpacity(0.8);
     tmpWin.loadURL(modalPath);
     tmpWin.show();
@@ -121,12 +160,67 @@ function createWindow () {
     // }, 1000);
     // console.log(tmpWin.isMovable());
   });
+
+  globalShortcut.register('CmdOrCtrl+U', biuBiu);
+
+  ipcMain.on('key-menu', biuBiu);
+
   globalShortcut.register('Ctrl+M', () => {
     win.webContents.send('mode-change');
   });
 }
 
 app.on('ready', createWindow);
+
+let ttt;
+let tttF = true;
+let tttDoing = false;
+
+const biuBiu = (e, args) => {
+  console.log('CmdOrCtrl+U');
+  if (ttt) {
+    // if (args && args.type) {
+    //   console.log(args);
+    //   return;
+    // }
+
+    if (!tttDoing) {
+      if (tttF) {
+        ttt.webContents.send('key-menu', { type: 'hide' });
+        // ttt.hide();
+      } else {
+        ttt.webContents.send('key-menu', { type: 'show' });
+        // ttt.show();
+      }
+      tttF = !tttF;
+    }
+  } else {
+    // const modalPath = 'http://localhost/~egoist/Web/draft/demo0037/';
+    const modalPath = `file://${path.join(__dirname, './src/plugins/KeyMenu/index.html')}`;
+    console.log(modalPath);
+    ttt = new BrowserWindow({
+      width: 600,
+      height: 90,
+      frame: false,
+      skipTaskbar: true,
+      resizable: false,
+      transparent: true,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    });
+
+    ttt.on('close', () => {
+      ttt = null;
+    });
+    ttt.on('blur', () => {
+      console.log('ttt blur');
+    });
+    // ttt.setOpacity(0.8);
+    ttt.loadURL(modalPath);
+    ttt.show();
+  }
+};
 
 setTimeout(() => {
   app.dock.hide();
@@ -138,6 +232,8 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('activate', () => { hideOrShowWin(true) });
+app.on('activate', () => {
+  hideOrShowWin(true);
+});
 
-app.on('before-quit', () => app.quitting = true);
+app.on('before-quit', () => (app.quitting = true));

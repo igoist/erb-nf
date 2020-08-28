@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as util from './util/';
+import { ipcRenderer } from 'electron';
 import { SearchResultProps, SearchResultState } from './Interfaces';
-
 
 const { scroll2 } = util;
 const scroll = scroll2;
-
 
 class SearchResult extends React.Component<SearchResultProps, SearchResultState> {
   constructor(props: SearchResultProps) {
@@ -18,7 +17,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
 
   handleKeyDown = (e: any) => {
     // console.log(this);
-    // console.log('The key code is: ' + e.keyCode);
+    console.log('The key code is: ' + e.keyCode);
 
     if ((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) {
       this.setState((state: SearchResultState, props: SearchResultProps) => {
@@ -26,7 +25,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
         return {
           targetIndex: newTargetIndex,
           current: scroll.returnCurrent(this.state.current, newTargetIndex)
-        }
+        };
       });
     }
     if ((e.keyCode === 75 && e.ctrlKey) || e.keyCode === 38) {
@@ -35,18 +34,21 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
         return {
           targetIndex: newTargetIndex,
           current: scroll.returnCurrent(this.state.current, newTargetIndex)
-        }
+        };
       });
     }
     // 因为是全局绑定的 keydown，输入文字会有问题
     if (e.keyCode === 13) {
       if (this.props.arr.length) {
-        const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
+        console.log(this.state);
+        // const item = this.props.originData[this.props.arr[this.state.targetIndex].originalIndex];
         // console.log(item.date, item.link);
-        console.log(item);
+        // this.props.handleEnterKey(item);
+
+        this.handleItem(this.state.targetIndex);
       }
     }
-  }
+  };
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
@@ -61,7 +63,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
       this.setState({
         targetIndex: 0,
         current: 0
-      })
+      });
     } else {
       let item = document.querySelector('li.selected');
       // 触发时间需要调整 写给函数专门进行判断
@@ -73,8 +75,11 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
     }
   }
 
-  handleItemClick(item: any, index: number) {
-    const { originData, mode, handleState } = this.props;
+  handleItem(index: number) {
+    const { arr, originData, mode, handleState } = this.props;
+
+    const item = arr[index];
+
     if (mode === 0) {
       console.log(originData[item.originalIndex].name);
       console.log(originData[item.originalIndex].mode);
@@ -85,6 +90,11 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
       console.log(originData[item.originalIndex].title);
       console.log(originData[item.originalIndex].link);
       console.log(scroll.returnCurrent(this.state.current, index));
+
+      if (originData[item.originalIndex].link) {
+        ipcRenderer.send('open-tab', { link: originData[item.originalIndex].link });
+      }
+
       this.setState({
         targetIndex: index,
         current: scroll.returnCurrent(this.state.current, index)
@@ -98,12 +108,17 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
 
     return (
       <ul id='searchResult'>
-        {
-          arr.map((item, i) => {
-            item.index = i;
-            return <li key={ i.toString() } className={ targetIndex === i ? 'selected': '' } onClick={ () => this.handleItemClick(item, i) } dangerouslySetInnerHTML={{ __html: item.colored }}></li>
-          })
-        }
+        {arr.map((item, i) => {
+          item.index = i;
+          return (
+            <li
+              key={i.toString()}
+              className={targetIndex === i ? 'selected' : ''}
+              onClick={() => this.handleItem(i)}
+              dangerouslySetInnerHTML={{ __html: item.colored }}
+            ></li>
+          );
+        })}
       </ul>
     );
   }
