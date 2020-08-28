@@ -31,9 +31,7 @@ const App = () => {
   const tt = AppHook.useContainer();
   const { value, data, result, mode, dispatch, toMode } = tt;
 
-  const handleF = (v: string) => {
-    console.log('F: ', v);
-
+  const handleFuzzy = (v: string) => {
     let ret = v === '' ? [] : fuzzyList(value, data, mode);
 
     dispatch({
@@ -44,7 +42,7 @@ const App = () => {
     });
   };
 
-  const { run } = useDebounceFn(handleF, {
+  const { run } = useDebounceFn(handleFuzzy, {
     wait: 300
   });
 
@@ -69,15 +67,18 @@ const App = () => {
     });
   };
 
-  const handleState = (mode: number) => {
-    // let tmp: any = handleSwitch(mode);
-    // tmp.value = '';
-    // tmp.result = [];
-  };
+  const handleEnterKey = (index: number) => {
+    const item = result[index];
 
-  const handleEnterKey = (item: any) => {
     if (mode === 0) {
       toMode(item.mode);
+    } else {
+      console.log(data[item.originalIndex].title);
+      console.log(data[item.originalIndex].link);
+
+      if (data[item.originalIndex].link) {
+        ipcRenderer.send('open-tab', { link: data[item.originalIndex].link });
+      }
     }
   };
 
@@ -175,9 +176,7 @@ const App = () => {
           </div>
         )}
       </div>
-      {(mode === 0 || mode === 1 || mode === 2) && (
-        <SearchResult value={value} arr={result} originData={data} mode={mode} handleState={handleState} handleEnterKey={handleEnterKey} />
-      )}
+      {(mode === 0 || mode === 1 || mode === 2) && <SearchResult value={value} arr={result} originData={data} mode={mode} handleEnterKey={handleEnterKey} />}
       {mode === 3 && (
         <VideoPlayer />
         // <AudioPlayer />

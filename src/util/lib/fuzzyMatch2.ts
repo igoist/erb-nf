@@ -100,6 +100,7 @@ const transformData = (data: Array<any>, mode: number) => {
     }
 
     ret.push({
+      ...data[i],
       originalIndex: i,
       original: item,
       colored: item

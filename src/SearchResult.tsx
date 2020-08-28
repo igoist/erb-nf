@@ -16,7 +16,6 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
   }
 
   handleKeyDown = (e: any) => {
-    // console.log(this);
     console.log('The key code is: ' + e.keyCode);
 
     if ((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) {
@@ -28,6 +27,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
         };
       });
     }
+
     if ((e.keyCode === 75 && e.ctrlKey) || e.keyCode === 38) {
       this.setState((state: SearchResultState) => {
         const newTargetIndex = state.targetIndex > 0 ? state.targetIndex - 1 : 0;
@@ -37,6 +37,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
         };
       });
     }
+
     // 因为是全局绑定的 keydown，输入文字会有问题
     if (e.keyCode === 13) {
       if (this.props.arr.length) {
@@ -76,30 +77,14 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
   }
 
   handleItem(index: number) {
-    const { arr, originData, mode, handleState } = this.props;
+    const { handleEnterKey } = this.props;
 
-    const item = arr[index];
+    handleEnterKey(index);
 
-    if (mode === 0) {
-      console.log(originData[item.originalIndex].name);
-      console.log(originData[item.originalIndex].mode);
-      handleState(originData[item.originalIndex].mode);
-    } else {
-      // console.log(item);
-      // console.log(originData[item.originalIndex].date);
-      console.log(originData[item.originalIndex].title);
-      console.log(originData[item.originalIndex].link);
-      console.log(scroll.returnCurrent(this.state.current, index));
-
-      if (originData[item.originalIndex].link) {
-        ipcRenderer.send('open-tab', { link: originData[item.originalIndex].link });
-      }
-
-      this.setState({
-        targetIndex: index,
-        current: scroll.returnCurrent(this.state.current, index)
-      });
-    }
+    this.setState({
+      targetIndex: index,
+      current: scroll.returnCurrent(this.state.current, index)
+    });
   }
 
   render() {

@@ -3,7 +3,9 @@ import { ipcRenderer, remote } from 'electron';
 import { createContainer } from 'unstated-next';
 import { ListItemInterface } from '../Interfaces';
 
-const { useState } = React;
+import { useRequest } from 'ahooks';
+
+const { useState, useEffect } = React;
 
 declare var window: any;
 

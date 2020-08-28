@@ -21,7 +21,6 @@ export interface SearchResultProps {
   arr: Array<any>,
   originData: Array<any>,
   mode: number,
-  handleState(mode: number): void;
   handleEnterKey?: any
 }
 
