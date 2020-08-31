@@ -9,8 +9,6 @@ const { useState, useEffect } = React;
 
 declare var window: any;
 
-let locked: boolean = false;
-
 const originData: Array<ListItemInterface> = remote.getGlobal('sharedObject').originData;
 
 const AppArr: any = [
@@ -29,115 +27,120 @@ const AppArr: any = [
   {
     name: 'Music',
     mode: 3
+  },
+  {
+    name: 'Douban Renting',
+    mode: 4
   }
 ];
 
 const baseUrl = 'http://10.0.1.78:6085';
 
-const ff = () => {
-  return fetch(`${baseUrl}/api/v1/list/${0}`)
+type MCResultType = {
+  mode: number,
+  list: Array<any>
+};
+
+const ff = (url: string, mode: number) => {
+  // return fetch(`${baseUrl}/api/v1/list/${0}`)
+  return fetch(url)
     .then((res: any) => res.json())
-    .then((r) => {
+    .then((r: any) => {
       if (r.Code === 0) {
         return {
-          mode: 2,
-          data: r.list
+          mode,
+          list: r.list
         };
       } else {
         return {
-          mode: 2,
-          data: []
+          mode,
+          list: []
         };
       }
     })
     .catch((e) => {
-      console.log(e);
+      console.log('ff error: ', e);
+      return {
+        mode: 0,
+        list: []
+      };
     });
 };
 
-const handleLocked = (l: boolean) => {
-  locked = l;
-};
-
 const handleSwitch = (mode: number) => {
-  handleLocked(true);
-
   return new Promise(async (resolve) => {
-    let r;
+    let r: MCResultType;
     switch (mode) {
       case 0:
         r = {
           mode,
-          data: AppArr
+          list: AppArr
         };
         break;
       case 1:
         r = {
           mode,
-          data: originData
+          list: originData
         };
         break;
       case 2:
-        r = await ff();
+        r = await ff(`${baseUrl}/api/v1/list/${0}/incognito`, 2);
+        break;
+      case 3:
+        r = {
+          mode,
+          list: [1, 2]
+        };
+        break;
+      case 4:
+        r = await ff(`${baseUrl}/api/v1/renting/${0}/`, 4);
         break;
       default:
         r = {
           mode,
-          data: originData
+          list: AppArr
         };
         break;
     }
 
     window.r = r;
-    handleLocked(false);
-    resolve(r);
+    setTimeout(() => {
+      resolve(r);
+    }, 300);
   });
 };
 
-const handleModeChange = (mode: number, flag?: boolean) => {
+const handleModeChange = (mode: number = 0): any => {
   return new Promise(async (resolve) => {
-    if (locked) {
-      console.log('want to change: ', mode);
-      resolve(false);
-    } else {
-      let newMode;
+    let tmpMode = mode;
 
-      if (flag) {
-        newMode = mode;
-      } else {
-        newMode = mode + 1;
-      }
-
-      if (newMode === AppArr.length) {
-        newMode = 0;
-      }
-
-      let r = await handleSwitch(newMode);
-      resolve(r);
+    if (tmpMode === AppArr.length) {
+      tmpMode = 0;
     }
+
+    let r = await handleSwitch(tmpMode);
+    resolve(r);
   });
 };
 
 const useAppHook = () => {
   const [value, setValue] = useState('');
-  const [data, setData] = useState(AppArr);
   const [result, setResult] = useState([]);
   const [mode, setMode] = useState(0);
 
-  const toMode = async (newMode: number) => {
-    const handled: any = await handleModeChange(newMode, true);
-    if (handled) {
-      setData(handled.data);
-      setMode(handled.mode);
-    }
-  };
+  const { data, error, loading, run } = useRequest(handleModeChange);
 
-  const toNextMode = async () => {
-    const handled: any = await handleModeChange(mode);
-    if (handled) {
-      setData(handled.data);
-      setMode(handled.mode);
+  useEffect(() => {
+    setResult([]);
+    run(mode);
+  }, [mode]);
+
+  const toNextMode = () => {
+    let tmp = mode + 1;
+    if (tmp === AppArr.length) {
+      tmp = 0;
     }
+    setMode(tmp);
   };
 
   const getCurrentValue = () => {
@@ -169,14 +172,14 @@ const useAppHook = () => {
   return {
     value,
     setValue,
-    data,
-    setData,
+    data: data || { list: [], mode: 0 },
+    loading,
+    // setData,
     result,
     setResult,
     mode,
     setMode,
-    toMode,
-    toNextMode,
+    // toNextMode,
     getCurrentValue,
     dispatch
   };

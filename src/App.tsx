@@ -27,12 +27,11 @@ const Loading = () => {
 
 const App = () => {
   const searchInput = useRef(null);
-  const [loading, setLoading] = useState(false);
   const tt = AppHook.useContainer();
-  const { value, data, result, mode, dispatch, toMode } = tt;
+  const { value, data, loading, result, mode, dispatch, setMode } = tt;
 
   const handleFuzzy = (v: string) => {
-    let ret = v === '' ? [] : fuzzyList(value, data, mode);
+    let ret = v === '' ? [] : fuzzyList(value, data.list, data.mode);
 
     dispatch({
       type: 'saveResult',
@@ -47,14 +46,10 @@ const App = () => {
   });
 
   const handleChange = (event: any) => {
-    console.log('enter hc: ', event);
-    // let ret = event.target.value.trim() === '' ? [] : fuzzyList(event.target.value, data, mode);
-
     dispatch({
       type: 'save',
       payload: {
         value: event.target.value
-        // result: ret
       }
     });
 
@@ -71,13 +66,13 @@ const App = () => {
     const item = result[index];
 
     if (mode === 0) {
-      toMode(item.mode);
+      setMode(item.mode);
     } else {
-      console.log(data[item.originalIndex].title);
-      console.log(data[item.originalIndex].link);
+      console.log(data.list[item.originalIndex].title);
+      console.log(data.list[item.originalIndex].link);
 
-      if (data[item.originalIndex].link) {
-        ipcRenderer.send('open-tab', { link: data[item.originalIndex].link });
+      if (data.list[item.originalIndex].link) {
+        ipcRenderer.send('open-tab', { link: data.list[item.originalIndex].link });
       }
     }
   };
@@ -92,33 +87,29 @@ const App = () => {
       // const myNotification = new (window as any).Notification(notification.title, notification);
       // handleDispatch()
       console.log('mode-change: ', mode);
-      setLoading(true);
 
-      setTimeout(() => {
-        dispatch({
-          type: 'toNextMode'
-        });
-        dispatch({
-          type: 'saveBoth',
-          payload: {
-            value: '',
-            result: [],
-            from: 'handleMC'
-          }
-        });
-        setLoading(false);
-      }, 300);
+      dispatch({
+        type: 'toNextMode'
+      });
+      dispatch({
+        type: 'saveBoth',
+        payload: {
+          value: '',
+          result: [],
+          from: 'handleMC'
+        }
+      });
     };
 
     ipcRenderer.on('mode-change', handleMC);
 
     const handleKeyDown = (e: any) => {
       if (((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) && value === '') {
-        if (result.length !== data.length) {
+        if (result.length !== data.list.length) {
           dispatch({
             type: 'saveResult',
             payload: {
-              result: transformData(data, mode),
+              result: transformData(data.list, mode),
               from: 'handleKeyDown'
             }
           });
@@ -154,7 +145,7 @@ const App = () => {
     });
   }, []);
 
-  if (mode !== AppArr.length - 1) {
+  if (mode !== 3) {
     ipcRenderer.send('change-win', {
       listHeight: result.length > 10 ? 10 : result.length
     });
@@ -176,7 +167,9 @@ const App = () => {
           </div>
         )}
       </div>
-      {(mode === 0 || mode === 1 || mode === 2) && <SearchResult value={value} arr={result} originData={data} mode={mode} handleEnterKey={handleEnterKey} />}
+      {(mode === 0 || mode === 1 || mode === 2 || mode === 4) && (
+        <SearchResult value={value} arr={result} originData={data.list} mode={mode} handleEnterKey={handleEnterKey} />
+      )}
       {mode === 3 && (
         <VideoPlayer />
         // <AudioPlayer />

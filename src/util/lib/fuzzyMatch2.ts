@@ -43,6 +43,9 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
     if (mode === 3) {
       item = list[i].link;
     }
+    if (mode === 4) {
+      item = list[i].title;
+    }
 
     const matches = fuzzyMatches(fuzzy, item);
 
@@ -89,7 +92,7 @@ const transformData = (data: Array<any>, mode: number) => {
     if (mode === 0) {
       item = data[i].name;
     }
-    if (mode === 1) {
+    if (mode === 1 || mode === 4) {
       item = data[i].title;
     }
     if (mode === 2) {
