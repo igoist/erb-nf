@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
-import { fuzzyMatch2 } from './util/';
+import { fuzzyMatch2 } from '@Utils';
 import SearchResult from './SearchResult';
 import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
 // import { ListItemInterface, AppState } from './Interfaces';
 import { AppHook, AppArr } from '@Models';
+
+import { ScrollList } from '@Components';
 
 import { useDebounceFn } from 'ahooks';
 
@@ -145,9 +147,11 @@ const App = () => {
     });
   }, []);
 
+  let tagH = result.length > 10 ? 10 : result.length;
+
   if (mode !== 3) {
     ipcRenderer.send('change-win', {
-      listHeight: result.length > 10 ? 10 : result.length
+      listHeight: tagH
     });
   } else {
     ipcRenderer.send('change-win', { listHeight: 1 });
@@ -168,7 +172,7 @@ const App = () => {
         )}
       </div>
       {(mode === 0 || mode === 1 || mode === 2 || mode === 4) && (
-        <SearchResult value={value} arr={result} originData={data.list} mode={mode} handleEnterKey={handleEnterKey} />
+        <ScrollList value={value} arr={result} mode={mode} handleEnterKey={handleEnterKey} tagH={tagH} />
       )}
       {mode === 3 && (
         <VideoPlayer />

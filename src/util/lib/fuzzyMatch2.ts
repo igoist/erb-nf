@@ -64,6 +64,7 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
 
       results.push({
         ...list[i],
+        currentIndex: i,
         originalIndex,
         original: item,
         colored: t
@@ -105,6 +106,7 @@ const transformData = (list: Array<any>, mode: number) => {
 
     ret.push({
       ...list[i],
+      currentIndex: i,
       originalIndex: i,
       original: item,
       colored: item

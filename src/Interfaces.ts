@@ -19,7 +19,8 @@ export interface AppState {
 export interface SearchResultProps {
   value: string,
   arr: Array<any>,
-  originData: Array<any>,
+  // originData: Array<any>,
+  tagH: number,
   mode: number,
   handleEnterKey?: any
 }

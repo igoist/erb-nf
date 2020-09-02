@@ -8,8 +8,13 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
+      "@Interfaces": ["src/Interfaces.ts"],
+      "@Components": ["src/components/"],
+      "@Components/*": ["src/components/*"],
       "@Models": ["src/models/"],
-      "@Models/*": ["src/models/*"]
+      "@Models/*": ["src/models/*"],
+      "@Utils": ["src/util/"],
+      "@Utils/*": ["src/util/*"]
     }
   },
   "include": [
