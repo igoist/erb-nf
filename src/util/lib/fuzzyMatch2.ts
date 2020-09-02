@@ -63,6 +63,7 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
       }
 
       results.push({
+        ...list[i],
         originalIndex,
         original: item,
         colored: t
@@ -84,26 +85,26 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
   return results;
 };
 
-const transformData = (data: Array<any>, mode: number) => {
+const transformData = (list: Array<any>, mode: number) => {
   let ret: Array<any> = [];
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     let item;
 
     if (mode === 0) {
-      item = data[i].name;
+      item = list[i].name;
     }
     if (mode === 1 || mode === 4) {
-      item = data[i].title;
+      item = list[i].title;
     }
     if (mode === 2) {
-      item = data[i].title;
+      item = list[i].title;
     }
     if (mode === 3) {
-      item = data[i].link;
+      item = list[i].link;
     }
 
     ret.push({
-      ...data[i],
+      ...list[i],
       originalIndex: i,
       original: item,
       colored: item

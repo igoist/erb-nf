@@ -58,7 +58,7 @@ const App = () => {
 
   const handleClick = () => {
     dispatch({
-      type: 'toNextMode'
+      type: 'toModeZero'
     });
   };
 
@@ -89,7 +89,7 @@ const App = () => {
       console.log('mode-change: ', mode);
 
       dispatch({
-        type: 'toNextMode'
+        type: 'toModeZero'
       });
       dispatch({
         type: 'saveBoth',

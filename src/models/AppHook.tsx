@@ -21,7 +21,7 @@ const AppArr: any = [
     mode: 1
   },
   {
-    name: 'Zhihu',
+    name: 'Zhihu Hot',
     mode: 2
   },
   {
@@ -143,15 +143,22 @@ const useAppHook = () => {
     setMode(tmp);
   };
 
+  const toModeZero = () => {
+    setMode(0);
+  };
+
   const getCurrentValue = () => {
     return mode;
   };
 
   const dispatch = (action: any) => {
-    console.log('dis: ', action);
+    console.log('dispatch: ', action);
     switch (action.type) {
       case 'toNextMode':
         toNextMode();
+        break;
+      case 'toModeZero':
+        toModeZero();
         break;
       case 'save':
         setValue(action.payload.value);
