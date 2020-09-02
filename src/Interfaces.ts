@@ -5,6 +5,7 @@ export interface ListItemInterface {
   date?: string
   name?: string
   mode?: number
+  currentIndex?: number
 }
 
 // App

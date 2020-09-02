@@ -1,4 +1,4 @@
-import { ListItemInterface } from '../../Interfaces';
+import { ListItemInterface } from '@Interfaces';
 
 const fuzzyMatches = (fuzzy: string, text: string) => {
   fuzzy = fuzzy.toLowerCase();
@@ -64,7 +64,6 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
 
       results.push({
         ...list[i],
-        currentIndex: i,
         originalIndex,
         original: item,
         colored: t
@@ -81,6 +80,11 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
     if (a.original < b.original) return -1;
     return 1;
   });
+
+  for (let i = 0; i < results.length; i++) {
+    results[i].currentIndex = i;
+  }
+
   console.timeEnd('fuzzy sort');
   console.log('fuzzy sort end, i: ', i, 'results.length: ', results.length, ' list.length: ', list.length);
   return results;
