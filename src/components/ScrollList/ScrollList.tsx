@@ -34,7 +34,7 @@ const TX = T - TP - 1 - TO;
 let observer: any = null;
 
 const List = (props: SearchResultProps) => {
-  const { arr, handleEnterKey } = props;
+  const { arr, handleEnterKey, tagH } = props;
 
   const refBox = useRef(null);
   const refTop = useRef(null);
@@ -54,13 +54,10 @@ const List = (props: SearchResultProps) => {
 
   const list = arr.slice(start - TO < 0 ? 0 : start - TO, end + TO);
 
-  // console.log(TX, maxEndIndex, listLength, end);
-  // console.log(start - TO < 0 ? 0 : start - TO, end + TO);
-
   useEffect(() => {
     setCurrent(0);
     setTargetIndex(0);
-    console.log('arr change: ', end, TX < maxEndIndex ? TX : maxEndIndex);
+    setStart(0);
     setEnd(TX < maxEndIndex ? TX : maxEndIndex);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,6 +91,7 @@ const List = (props: SearchResultProps) => {
 
         updateState(newStart, newEnd);
       }
+
       // Scroll up
       if (entry.isIntersecting && entry.target.id === 'top') {
         // console.log('Scroll up: ', start, end);
@@ -170,7 +168,6 @@ const List = (props: SearchResultProps) => {
     // 触发时间需要调整 写给函数专门进行判断
     if (item) {
       let searchResult: any = document.getElementById('searchResult');
-      // searchResult.scrollTop = parseInt(56 * this.state.current);
       searchResult.scrollTop = 56 * current;
     }
   }, [current]);
@@ -188,7 +185,7 @@ const List = (props: SearchResultProps) => {
   };
 
   return (
-    <ul id='searchResult' ref={refBox}>
+    <ul id='searchResult' style={{ height: tagH * 56 + 'px' }} ref={refBox}>
       {list.map((item: any, index: number) => {
         const top = 56 * (index + (start - 5 > 0 ? start - 5 : 0)) + 'px';
         const refVal = getReference(item);
