@@ -5,7 +5,7 @@ import { SearchResultProps } from '@Interfaces';
 
 const { useState, useRef, useEffect } = React;
 
-const { scroll2 } = util;
+const { copy, scroll2 } = util;
 const { returnCurrent } = scroll2;
 
 const arr: any = [];
@@ -17,10 +17,6 @@ for (let i = 0; i < 115; i++) {
   });
 }
 
-// type ListProps = {
-//   arr: any[]
-// }
-
 /**
  * T : THRESHOLD
  * TO: THRESHOLD_OFFSET
@@ -29,7 +25,7 @@ for (let i = 0; i < 115; i++) {
 const T = 30;
 const TO = 5;
 const TP = 10;
-const TX = T - TP - 1 - TO;
+const TX = T - TP - 1 - TO; // 14
 
 let observer: any = null;
 
@@ -55,10 +51,22 @@ const List = (props: SearchResultProps) => {
   const list = arr.slice(start - TO < 0 ? 0 : start - TO, end + TO);
 
   useEffect(() => {
+    console.log(current, targetIndex, start, end);
+  });
+
+  useEffect(() => {
     setCurrent(0);
     setTargetIndex(0);
     setStart(0);
     setEnd(TX < maxEndIndex ? TX : maxEndIndex);
+
+    let searchResult: any = document.getElementById('searchResult');
+    searchResult.style.height = 0 + 'px';
+
+    setTimeout(() => {
+      searchResult.scrollTop = 0;
+      searchResult.style.height = tagH * 56 + 'px';
+    }, 16);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arr]);
@@ -70,24 +78,31 @@ const List = (props: SearchResultProps) => {
       threshold: 0.1
     };
 
+    if (refOB.current) {
+      refOB.current.disconnect();
+    }
+
     refOB.current = new IntersectionObserver(callback, options);
+
     if (refTop.current) {
       refOB.current.observe(refTop.current);
     }
     if (refBottom.current) {
       refOB.current.observe(refBottom.current);
     }
+
+    // console.log('intiateScrollObserver: ', start, end);
   };
 
   const callback = (entries: any, observer: any) => {
     entries.forEach((entry: any, index: number) => {
       // Scroll Down
       // We make increments and decrements in 10s
-
       if (entry.isIntersecting && entry.target.id === 'bottom') {
         // console.log('Scroll down: ', start, end);
         const newEnd = end + TO <= maxEndIndex ? end + TO : maxEndIndex;
         const newStart = end - TX > 0 ? (end - TX <= maxStartIndex ? end - TX : maxStartIndex) : 0;
+        // console.log(`old start: ${start}, new: ${newStart} `, end - TX, maxStartIndex, end, TX);
 
         updateState(newStart, newEnd);
       }
@@ -100,6 +115,7 @@ const List = (props: SearchResultProps) => {
         let t = maxEndIndex;
         const newEnd = start + TX <= t ? start + TX : t;
 
+        // console.log(`xold start: ${start}, new: ${newStart} `, end - TX, maxStartIndex, end, TX, newEnd);
         updateState(newStart, newEnd);
       }
     });
@@ -115,12 +131,17 @@ const List = (props: SearchResultProps) => {
 
   const resetObservation = () => {
     // console.log(refTop.current && refTop.current.className, refBottom.current && refBottom.current.className, start, end);
-    refOB.current.unobserve(refBottom.current);
-    refOB.current.unobserve(refTop.current);
+    if (refTop.current) {
+      refOB.current.unobserve(refTop.current);
+    }
+    if (refBottom.current) {
+      refOB.current.unobserve(refBottom.current);
+    }
   };
 
   const handleItem = (index: number) => {
     handleEnterKey(index);
+    console.log(index, targetIndex, current, returnCurrent(current, index));
 
     setTargetIndex(index);
     setCurrent(returnCurrent(current, index));
@@ -128,6 +149,7 @@ const List = (props: SearchResultProps) => {
 
   useEffect(() => {
     intiateScrollObserver();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -164,11 +186,13 @@ const List = (props: SearchResultProps) => {
   });
 
   useEffect(() => {
-    let item = document.querySelector('li.selected');
+    let item = document.querySelector('.s-item.selected');
     // 触发时间需要调整 写给函数专门进行判断
     if (item) {
       let searchResult: any = document.getElementById('searchResult');
       searchResult.scrollTop = 56 * current;
+    } else {
+      console.log(`I can't get the selected item: `, current, targetIndex);
     }
   }, [current]);
 
@@ -185,24 +209,25 @@ const List = (props: SearchResultProps) => {
   };
 
   return (
-    <ul id='searchResult' style={{ height: tagH * 56 + 'px' }} ref={refBox}>
+    <div id='searchResult' style={{ height: '0' }} ref={refBox}>
       {list.map((item: any, index: number) => {
         const top = 56 * (index + (start - 5 > 0 ? start - 5 : 0)) + 'px';
         const refVal = getReference(item);
         const id = item.currentIndex === start ? 'top' : item.currentIndex === end ? 'bottom' : undefined;
         return (
-          <li
-            className={`${'id-' + item.currentIndex}` + (targetIndex === item.currentIndex ? ' selected' : '')}
+          <div
+            className={`s-item ${'id-' + item.currentIndex}` + (targetIndex === item.currentIndex ? ' selected' : '')}
             key={'s-item-' + item.currentIndex}
             style={{ top }}
             ref={refVal}
             id={id}
-            onClick={() => handleItem(index)}
+            onClick={() => handleItem(item.currentIndex)}
             dangerouslySetInnerHTML={{ __html: item.colored }}
-          ></li>
+            data-id={item.currentIndex}
+          ></div>
         );
       })}
-    </ul>
+    </div>
   );
 };
 

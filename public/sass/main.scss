@@ -139,7 +139,7 @@ $itemHeight: 56px;
 
 
 #searchResult {
-  max-height: $itemHeight * 10;
+  // max-height: $itemHeight * 10;
   position: relative;
   overflow: scroll;
 
@@ -158,7 +158,7 @@ $itemHeight: 56px;
   // }
 
 
-  li {
+  .s-item {
     position: absolute;
     // border: 1px solid #333;
     // border: none;
