@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
 import { createContainer } from 'unstated-next';
-import { ListItemInterface } from '../Interfaces';
+import { ListItemInterface } from '@Types';
 
 import { useRequest } from 'ahooks';
 
@@ -34,7 +34,8 @@ const AppArr: any = [
   }
 ];
 
-const baseUrl = 'http://10.0.1.78:6085';
+// const baseUrl = 'http://10.0.1.78:6085';
+const baseUrl = 'http://localhost:6085';
 
 type MCResultType = {
   mode: number,
@@ -152,7 +153,7 @@ const useAppHook = () => {
   };
 
   const dispatch = (action: any) => {
-    console.log('dispatch: ', action);
+    // console.log('dispatch: ', action);
     switch (action.type) {
       case 'toNextMode':
         toNextMode();

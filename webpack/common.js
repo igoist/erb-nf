@@ -15,7 +15,7 @@ const webpackConfig = {
   resolve: {
     alias: {
       '@Components': path.resolve(path.resolve(__dirname, '..'), 'src/components/'),
-      '@Interfaces': path.resolve(path.resolve(__dirname, '..'), 'src/Interfaces.ts'),
+      '@Types': path.resolve(path.resolve(__dirname, '..'), 'src/Types.ts'),
       '@Models': path.resolve(path.resolve(__dirname, '..'), 'src/models/'),
       '@Utils': path.resolve(path.resolve(__dirname, '..'), 'src/util/')
     },

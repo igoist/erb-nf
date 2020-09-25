@@ -1,3 +1,3 @@
-import ScrollList from './ScrollList';
+import ScrollListWithKeyBoard from './ScrollListWithKeyBoard';
 
-export default ScrollList;
+export default ScrollListWithKeyBoard;

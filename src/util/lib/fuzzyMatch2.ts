@@ -1,4 +1,4 @@
-import { ListItemInterface } from '@Interfaces';
+import { ListItemInterface } from '@Types';
 
 const fuzzyMatches = (fuzzy: string, text: string) => {
   fuzzy = fuzzy.toLowerCase();

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import * as util from './util/';
-import { ipcRenderer } from 'electron';
-import { SearchResultProps, SearchResultState } from './Interfaces';
+import * as util from '@Utils';
+import { SearchResultProps, SearchResultState } from './Types';
 
 const { scroll2 } = util;
 const scroll = scroll2;
@@ -16,7 +15,7 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
   }
 
   handleKeyDown = (e: any) => {
-    console.log('The key code is: ' + e.keyCode);
+    // console.log('The key code is: ' + e.keyCode);
 
     if ((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) {
       this.setState((state: SearchResultState, props: SearchResultProps) => {
@@ -90,6 +89,8 @@ class SearchResult extends React.Component<SearchResultProps, SearchResultState>
   render() {
     const { targetIndex } = this.state;
     const { arr } = this.props;
+
+    console.log(targetIndex, this.state.current);
 
     return (
       <ul id='searchResult'>

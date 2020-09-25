@@ -8,7 +8,7 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "@Interfaces": ["src/Interfaces.ts"],
+      "@Types": ["src/Types.ts"],
       "@Components": ["src/components/"],
       "@Components/*": ["src/components/*"],
       "@Models": ["src/models/"],

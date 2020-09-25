@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
 import { fuzzyMatch2 } from '@Utils';
-import SearchResult from './SearchResult';
+// import SearchResult from './SearchResult';
 import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
 // import { ListItemInterface, AppState } from './Interfaces';
@@ -165,7 +165,7 @@ const App = () => {
           <Loading />
         ) : (
           <div className={`inputAfter mode-${mode}`} onClick={handleClick}>
-            <button aria-label='搜索' type='button' className='btn searchBar-searchIcon Button--primary'>
+            <button aria-label='搜索' type='button' className='btn searchBar-searchIcon Button--primary shake-hard'>
               <span></span>
             </button>
           </div>
