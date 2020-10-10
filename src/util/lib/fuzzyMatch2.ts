@@ -1,5 +1,21 @@
 import { ListItemInterface } from '@Types';
 
+const pickItem = (mode: number, list: any, i: number) => {
+  let item;
+
+  if (mode === 0) {
+    item = list[i].name;
+  }
+  if (mode === 1 || mode === 2 || mode === 4 || mode === 5 || mode === 6 || mode === 7) {
+    item = list[i].title;
+  }
+  if (mode === 3) {
+    item = list[i].link;
+  }
+
+  return item;
+};
+
 const fuzzyMatches = (fuzzy: string, text: string) => {
   fuzzy = fuzzy.toLowerCase();
   text = text.toLowerCase();
@@ -30,22 +46,7 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
   for (let i = 0; i < list.length; i++) {
     const originalIndex = i;
 
-    let item;
-    if (mode === 0) {
-      item = list[i].name;
-    }
-    if (mode === 1) {
-      item = list[i].title;
-    }
-    if (mode === 2) {
-      item = list[i].title;
-    }
-    if (mode === 3) {
-      item = list[i].link;
-    }
-    if (mode === 4) {
-      item = list[i].title;
-    }
+    let item = pickItem(mode, list, i);
 
     const matches = fuzzyMatches(fuzzy, item);
 
@@ -93,20 +94,7 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
 const transformData = (list: Array<any>, mode: number) => {
   let ret: Array<any> = [];
   for (let i = 0; i < list.length; i++) {
-    let item;
-
-    if (mode === 0) {
-      item = list[i].name;
-    }
-    if (mode === 1 || mode === 4) {
-      item = list[i].title;
-    }
-    if (mode === 2) {
-      item = list[i].title;
-    }
-    if (mode === 3) {
-      item = list[i].link;
-    }
+    let item = pickItem(mode, list, i);
 
     ret.push({
       ...list[i],

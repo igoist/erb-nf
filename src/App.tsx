@@ -11,7 +11,7 @@ import { ScrollList } from '@Components';
 
 import { useDebounceFn } from 'ahooks';
 
-const { useState, useEffect, useRef } = React;
+const { useEffect, useRef } = React;
 
 const { fuzzyList, transformData } = fuzzyMatch2;
 
@@ -69,9 +69,16 @@ const App = () => {
 
     if (mode === 0) {
       setMode(item.mode);
+    } else if (mode === 5) {
+      dispatch({
+        type: 'toV2Node',
+        payload: {
+          id: item.id
+        }
+      });
     } else {
       console.log(data.list[item.originalIndex].title);
-      console.log(data.list[item.originalIndex].link);
+      console.log(data.list[item.originalIndex].link || data.list[item.originalIndex].url);
 
       if (data.list[item.originalIndex].link) {
         ipcRenderer.send('open-tab', { link: data.list[item.originalIndex].link });
@@ -92,14 +99,6 @@ const App = () => {
 
       dispatch({
         type: 'toModeZero'
-      });
-      dispatch({
-        type: 'saveBoth',
-        payload: {
-          value: '',
-          result: [],
-          from: 'handleMC'
-        }
       });
     };
 
@@ -171,12 +170,12 @@ const App = () => {
           </div>
         )}
       </div>
-      {(mode === 0 || mode === 1 || mode === 2 || mode === 4) && (
+      {(mode === 0 || mode === 1 || mode === 2 || mode === 4 || mode === 5 || mode === 6 || mode === 7) && (
         <ScrollList value={value} arr={result} mode={mode} handleEnterKey={handleEnterKey} tagH={tagH} />
       )}
       {mode === 3 && (
-        <VideoPlayer />
-        // <AudioPlayer />
+        // <VideoPlayer />
+        <AudioPlayer />
       )}
     </>
   );

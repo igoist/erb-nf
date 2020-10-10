@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as util from '@Utils';
+import * as utils from '@Utils';
 
 import useScrollList from './useScrollList';
 
@@ -7,7 +7,7 @@ import { SearchResultProps } from '@Types';
 
 const { useEffect } = React;
 
-const { scroll2 } = util;
+const { scroll2 } = utils;
 const { returnCurrent } = scroll2;
 
 let observer: any = null;
