@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "build": "webpack",
+    "build-dll": "webpack --config webpack/dll.js",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "start": "electron ."
   },

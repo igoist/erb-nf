@@ -1,6 +1,14 @@
 const merge = require('webpack-merge');
 const common = require('./common.js');
 const webpack = require('webpack');
+const path = require('path');
+
+let bundle;
+try {
+  bundle = path.resolve(__dirname, '../dist/dll/react-map.json');
+} catch (e) {
+  bundle = '';
+}
 
 module.exports = merge(common, {
   devtool: 'inline-source-map',
@@ -13,5 +21,10 @@ module.exports = merge(common, {
     port: 3101,
     publicPath: '/'
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DllReferencePlugin({
+      manifest: bundle
+    })
+  ]
 });
