@@ -7,7 +7,7 @@ module.exports = {
   mode: 'production',
 
   entry: {
-    react: ['react', 'react-dom', 'react-router-dom', 'ahooks']
+    react: ['react', 'react-dom', 'react-router-dom', 'ahooks', 'antd']
   },
 
   output: {

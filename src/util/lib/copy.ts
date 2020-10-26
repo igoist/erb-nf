@@ -5,7 +5,11 @@ type LooseObject = {
 export const deepCopyOA = (i: LooseObject) => {
   let o: LooseObject = {};
   for (let k in i) {
-    o[k] = i[k];
+    if (typeof i[k] === 'object') {
+      o[k] = deepCopyOA(i[k]);
+    } else {
+      o[k] = i[k];
+    }
   }
   return o;
 };

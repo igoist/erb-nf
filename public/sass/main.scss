@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  background-color: #333;
+  background-color: #333 !important;
   overflow: hidden;
 }
 
@@ -205,5 +205,6 @@ $itemHeight: 56px;
 @import './components/_loading';
 @import './components/_media';
 @import './components/_shake';
+@import './pages/_pictureswall';
 
 

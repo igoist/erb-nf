@@ -6,10 +6,10 @@ import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
 // import { ListItemInterface, AppState } from './Interfaces';
 import { AppHook, AppArr } from '@Models';
-
+import { useDebounceFn } from 'ahooks';
 import { ScrollList } from '@Components';
 
-import { useDebounceFn } from 'ahooks';
+import { PictureWall, Admin } from './pages';
 
 const { useEffect, useRef } = React;
 
@@ -144,16 +144,21 @@ const App = () => {
         searchInput.current.focus();
       }
     });
+
+    // 配合 antd dark theme
+    document.body.dataset.theme = 'dark';
   }, []);
 
   let tagH = result.length > 10 ? 10 : result.length;
 
-  if (mode !== 3) {
+  if (mode === 3) {
+    ipcRenderer.send('change-win', { listHeight: 1 });
+  } else if (mode === 8 || mode === 9) {
+    ipcRenderer.send('change-win', { listHeight: 10 });
+  } else {
     ipcRenderer.send('change-win', {
       listHeight: tagH
     });
-  } else {
-    ipcRenderer.send('change-win', { listHeight: 1 });
   }
 
   return (
@@ -171,12 +176,14 @@ const App = () => {
         )}
       </div>
       {(mode === 0 || mode === 1 || mode === 2 || mode === 4 || mode === 5 || mode === 6 || mode === 7) && (
-        <ScrollList value={value} arr={result} mode={mode} handleEnterKey={handleEnterKey} tagH={tagH} />
+        <ScrollList arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} />
       )}
       {mode === 3 && (
         // <VideoPlayer />
         <AudioPlayer />
       )}
+      {mode === 8 && <PictureWall />}
+      {mode === 9 && <Admin />}
     </>
   );
 };
