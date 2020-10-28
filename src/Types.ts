@@ -1,4 +1,10 @@
 // ...
+
+export type DispatchActionType = {
+  type: string,
+  payload?: any
+};
+
 export interface ListItemInterface {
   title?: string
   link?: string
@@ -7,6 +13,26 @@ export interface ListItemInterface {
   mode?: number
   currentIndex?: number
 }
+
+type metaItemType = {
+  dataIndex: string
+};
+
+type ListItemMetasType = {
+  title: metaItemType,
+  link: metaItemType
+};
+
+export type ListItemType = {
+  id: number,
+  index?: number,
+  name: string,
+  type: string,
+  metas: ListItemMetasType,
+  api?: string,
+  locked: boolean,
+  visible: boolean
+};
 
 // App
 export interface AppState {
@@ -18,12 +44,14 @@ export interface AppState {
 
 // SearchResult部分
 export interface SearchResultProps {
-  value: string,
+  // value: string,
   arr: Array<any>,
   // originData: Array<any>,
-  tagH: number,
-  mode: number,
-  handleEnterKey?: any
+  tagH?: number,
+  // mode: number,
+  payload?: any,
+  handleEnterKey?: any,
+  dispatch?: any,
 }
 
 export interface SearchResultState {

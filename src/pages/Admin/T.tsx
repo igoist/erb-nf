@@ -1,15 +1,9 @@
 import * as React from 'react';
-import { Button, Divider, List, Typography, Space, Form, Input, message } from 'antd';
+import { Button, Divider, List, message, Space, Typography } from 'antd';
 
-import CreateForm from './components/CreateForm';
 import useAdminHook from './useAdminHook';
 
-const { Item } = Form;
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-};
+import FormModal from './FormModal';
 
 const warning = (s = 'Unlock it first~') => {
   return () => {
@@ -84,6 +78,12 @@ const T = () => {
     });
   };
 
+  const handleSave = () => {
+    dispatch({
+      type: 'SaveData'
+    });
+  };
+
   const handleLockUnlock = (locked: boolean, index: number) => {
     if (locked) {
       dispatch({
@@ -129,11 +129,21 @@ const T = () => {
     }
   };
 
+  const returnInitialValues = () => {
+    return mode === 2
+      ? formData
+      : {
+          id: data.length > 0 ? data[data.length - 1].id + 1 : 0,
+          index: data.length,
+          visible: true
+        };
+  };
+
   return (
     <>
       <Space style={{ marginBottom: 16, float: 'right' }} align='center'>
         <Button onClick={openAddModal}>新增</Button>
-        <Button>删除</Button>
+        <Button onClick={handleSave}>保存</Button>
         {/* <Button>Clear filters and sorters</Button> */}
       </Space>
       <Divider orientation='left'>ERB Items</Divider>
@@ -162,35 +172,7 @@ const T = () => {
         )}
       />
 
-      <CreateForm onCancel={closeModal} visible={createModalVisible} title={'Add item'}>
-        <Form {...layout} name='basic' initialValues={mode === 2 ? formData : {}} onFinish={handleFinish()} onFinishFailed={() => {}}>
-          <Item label='Index' name='index' rules={[{ required: false }]} style={{ display: 'none' }}>
-            <Input />
-          </Item>
-
-          <Item label='Name' name='name' rules={[{ required: true, message: 'Item name please!' }]}>
-            <Input />
-          </Item>
-
-          <Item label='Type' name='type' rules={[{ required: true, message: 'Item type please!' }]}>
-            <Input />
-          </Item>
-
-          <Item label='Meta Title' name='title' rules={[{ required: true, message: 'Please meta title please!' }]}>
-            <Input />
-          </Item>
-
-          <Item label='Meta Link' name='link' rules={[{ required: true, message: 'Meta link please!' }]}>
-            <Input />
-          </Item>
-
-          <Item wrapperCol={{ offset: 8 }}>
-            <Button type='primary' htmlType='submit'>
-              Submit
-            </Button>
-          </Item>
-        </Form>
-      </CreateForm>
+      <FormModal onCancel={closeModal} visible={createModalVisible} initialValues={returnInitialValues()} onFinish={handleFinish()} />
     </>
   );
 };

@@ -1,0 +1,51 @@
+[
+  {
+    "api": "/api/v1/list/0/incognito",
+    "id": 0,
+    "index": 0,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "title"
+      }
+    },
+    "name": "Zhihu Hot",
+    "type": "ScrollList"
+  },
+  {
+    "api": "/api/v1/v2ex/hot/",
+    "id": 1,
+    "index": 1,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "title"
+      }
+    },
+    "name": "v2ex Hot",
+    "type": "ScrollList"
+  },
+  {
+    "api": "/api/v1/renting/0/",
+    "id": 2,
+    "index": 2,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "titile"
+      }
+    },
+    "name": "Douban Renting",
+    "type": "ScrollList",
+    "visible": false
+  }
+]

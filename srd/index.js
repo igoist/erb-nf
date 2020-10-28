@@ -3,6 +3,10 @@ const path = require('path');
 const { ipcMain, app, BrowserWindow, globalShortcut, Menu, Tray } = require('electron');
 const { exec } = require('child_process');
 const child_process = require('child_process');
+const utils = require('./utils');
+
+const { readFile, writeFile } = utils.file;
+
 function pbcopy(data) {
   child_process.spawn('pbcopy');
   proc.stdin.write(data);
@@ -51,7 +55,7 @@ function createWindow() {
   // Tray 文件盒；托盘；隔底匣；（无线电的）发射箱
   const iconName = 'iconTemplate.png'; // process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png'
   console.log(path.join(__dirname, 'public/img'));
-  const iconPath = path.join(path.join(__dirname, 'public/img'), iconName);
+  const iconPath = path.join(path.join(path.resolve(__dirname, '../'), 'public/img'), iconName);
   appIcon = new Tray(iconPath);
 
   const contextMenu = Menu.buildFromTemplate([
@@ -89,6 +93,23 @@ function createWindow() {
     win.setSize(winWidth, winHeightUnit * (arg.listHeight + 1));
   });
 
+  ipcMain.on('get-list-item', async (event, arg) => {
+    let r = await readFile('./data.json');
+
+    win.webContents.send('list-item-data', {
+      data: JSON.parse(r)
+    });
+  });
+
+  ipcMain.on('save-list-item', async (event, arg) => {
+    let r = await writeFile('./data.json', JSON.stringify(arg.data, null, 2));
+
+    win.webContents.send('message-done', {
+      status: r ? 'success' : 'error',
+      msg: r ? '数据保存成功' : '数据保存失败'
+    });
+  });
+
   ipcMain.on('open-tab', (event, arg) => {
     exec(`/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --incognito ${arg.link}`, (err, stdout, stderr) => {
       if (err) {
@@ -120,7 +141,7 @@ function createWindow() {
     }
   });
   globalShortcut.register('Alt+S', () => {
-    win.webContents.send('foucs-toggle');
+    win.webContents.send('focus-toggle');
   });
   // globalShortcut.register('Cmd+C', () => {
   //   exec('pbcopy', (err, stdout, stderr) => {
@@ -196,7 +217,7 @@ const biuBiu = (e, args) => {
     }
   } else {
     // const modalPath = 'http://localhost/~egoist/Web/draft/demo0037/';
-    const modalPath = `file://${path.join(__dirname, './src/plugins/KeyMenu/index.html')}`;
+    const modalPath = `file://${path.join(path.resolve(__dirname, '../'), './src/plugins/KeyMenu/index.html')}`;
     console.log(modalPath);
     ttt = new BrowserWindow({
       width: 600,
