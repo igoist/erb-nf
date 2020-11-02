@@ -13,7 +13,8 @@
       }
     },
     "name": "Zhihu Hot",
-    "type": "ScrollList"
+    "type": "ScrollList",
+    "visible": true
   },
   {
     "api": "/api/v1/v2ex/hot/",
@@ -29,7 +30,8 @@
       }
     },
     "name": "v2ex Hot",
-    "type": "ScrollList"
+    "type": "ScrollList",
+    "visible": true
   },
   {
     "api": "/api/v1/renting/0/",
@@ -45,6 +47,69 @@
       }
     },
     "name": "Douban Renting",
+    "type": "ScrollList",
+    "visible": false
+  },
+  {
+    "api": "/api/v1/v2ex/nodes/",
+    "id": 3,
+    "index": 3,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "title"
+      }
+    },
+    "name": "v2ex Nodes",
+    "type": "ScrollList",
+    "visible": true
+  },
+  {
+    "api": "/api/v1/v2ex/nodes/",
+    "id": 4,
+    "index": 4,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "title"
+      }
+    },
+    "name": "Admin",
+    "type": "Admin",
+    "visible": true
+  },
+  {
+    "id": 5,
+    "index": 5,
+    "locked": true,
+    "metas": {
+      "link": {},
+      "title": {}
+    },
+    "name": "Music",
+    "type": "Music",
+    "visible": true
+  },
+  {
+    "api": "/api/v1/v2ex/node/:id",
+    "id": 6,
+    "index": 6,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": "link"
+      },
+      "title": {
+        "dataIndex": "title"
+      }
+    },
+    "name": "v2ex Node",
     "type": "ScrollList",
     "visible": false
   }

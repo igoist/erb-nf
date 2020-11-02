@@ -4,11 +4,10 @@ import { fuzzyMatch2 } from '@Utils';
 // import SearchResult from './SearchResult';
 import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
-// import { ListItemInterface, AppState } from './Interfaces';
-import { AppHook, AppArr } from '@Models';
+import { useAppHook } from '@Models';
 import { useDebounceFn } from 'ahooks';
 import { ScrollList } from '@Components';
-
+import { ListItemType } from '@Types';
 import { PictureWall, Admin } from './pages';
 
 const { useEffect, useRef } = React;
@@ -27,13 +26,25 @@ const Loading = () => {
   );
 };
 
+const getTitleIndex = (mode: number, arr: Array<ListItemType>) => {
+  let titleIndex;
+  if (mode === -1) {
+    titleIndex = 'name';
+  } else {
+    titleIndex = arr[mode].metas.title.dataIndex;
+  }
+
+  return titleIndex;
+};
+
 const App = () => {
   const searchInput = useRef(null);
-  const tt = AppHook.useContainer();
-  const { value, data, loading, result, mode, dispatch, setMode } = tt;
+  const { AppArr, value, data, loading, result, mode, dispatch, setMode } = useAppHook.useContainer();
+
+  const item = AppArr[mode];
 
   const handleFuzzy = (v: string) => {
-    let ret = v === '' ? [] : fuzzyList(value, data.list, data.mode);
+    let ret = v === '' ? [] : fuzzyList(value, data.list, getTitleIndex(mode, AppArr));
 
     dispatch({
       type: 'saveResult',
@@ -65,23 +76,34 @@ const App = () => {
   };
 
   const handleEnterKey = (index: number) => {
-    const item = result[index];
+    const tmpItem = result[index];
 
-    if (mode === 0) {
-      setMode(item.mode);
-    } else if (mode === 5) {
+    if (mode === -1) {
+      let tmp = AppArr.filter((item) => {
+        return item.visible;
+      });
+
+      // console.log('xxxxxxx', index, tmp, tmp[index].index);
+      setMode(tmp[index].index);
+    } else if (item.name === 'v2ex Nodes') {
+      let tmpMode = AppArr.filter((item) => {
+        return item.name === 'v2ex Node';
+      })[0].index;
+      console.log('enter: ', tmpMode, tmpItem.id);
+
       dispatch({
         type: 'toV2Node',
         payload: {
-          id: item.id
+          mode: tmpMode,
+          id: tmpItem.id
         }
       });
     } else {
-      console.log(data.list[item.originalIndex].title);
-      console.log(data.list[item.originalIndex].link || data.list[item.originalIndex].url);
+      console.log(data.list[tmpItem.originalIndex].title);
+      console.log(data.list[tmpItem.originalIndex].link || data.list[tmpItem.originalIndex].url);
 
-      if (data.list[item.originalIndex].link) {
-        ipcRenderer.send('open-tab', { link: data.list[item.originalIndex].link });
+      if (data.list[tmpItem.originalIndex].link) {
+        ipcRenderer.send('open-tab', { link: data.list[tmpItem.originalIndex].link });
       }
     }
   };
@@ -110,7 +132,7 @@ const App = () => {
           dispatch({
             type: 'saveResult',
             payload: {
-              result: transformData(data.list, mode),
+              result: transformData(data.list, getTitleIndex(mode, AppArr)),
               from: 'handleKeyDown'
             }
           });
@@ -137,7 +159,7 @@ const App = () => {
   });
 
   useEffect(() => {
-    ipcRenderer.on('foucs-toggle', () => {
+    ipcRenderer.on('focus-toggle', () => {
       if (searchInput.current === document.activeElement) {
         searchInput.current.blur();
       } else {
@@ -151,15 +173,34 @@ const App = () => {
 
   let tagH = result.length > 10 ? 10 : result.length;
 
-  if (mode === 3) {
-    ipcRenderer.send('change-win', { listHeight: 1 });
-  } else if (mode === 8 || mode === 9) {
-    ipcRenderer.send('change-win', { listHeight: 10 });
-  } else {
+  if (mode === -1 || (item && item.type === 'ScrollList')) {
     ipcRenderer.send('change-win', {
       listHeight: tagH
     });
+  } else {
+    ipcRenderer.send('change-win', { listHeight: 10 });
   }
+  console.log('dd:', data);
+  const renderMain = () => {
+    if (mode === -1 || (item && item.type === 'ScrollList')) {
+      return <ScrollList arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} />;
+    } else if (item && item.name === 'Music') {
+      // <VideoPlayer />
+      return <AudioPlayer />;
+    } else if (item && item.type === 'Admin') {
+      return <Admin />;
+    }
+  };
+
+  const returnType = (mode: number) => {
+    if (mode === -1) {
+      return 'apps';
+    } else if (item && item.type === 'Music') {
+      return 'music';
+    } else {
+      return 'scroll-list';
+    }
+  };
 
   return (
     <>
@@ -168,22 +209,14 @@ const App = () => {
         {loading ? (
           <Loading />
         ) : (
-          <div className={`inputAfter mode-${mode}`} onClick={handleClick}>
+          <div className={`inputAfter type-${returnType(mode)}`} onClick={handleClick}>
             <button aria-label='搜索' type='button' className='btn searchBar-searchIcon Button--primary shake-hard'>
               <span></span>
             </button>
           </div>
         )}
       </div>
-      {(mode === 0 || mode === 1 || mode === 2 || mode === 4 || mode === 5 || mode === 6 || mode === 7) && (
-        <ScrollList arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} />
-      )}
-      {mode === 3 && (
-        // <VideoPlayer />
-        <AudioPlayer />
-      )}
-      {mode === 8 && <PictureWall />}
-      {mode === 9 && <Admin />}
+      {renderMain()}
     </>
   );
 };

@@ -12,7 +12,7 @@ const warning = (s = 'Unlock it first~') => {
 };
 
 const T = () => {
-  const { createModalVisible, formData, data, mode, dispatch } = useAdminHook();
+  const { createModalVisible, formData, data, dataGuarantee, mode, dispatch } = useAdminHook();
 
   const handleCreateModalVisible = (visible: boolean) => {
     dispatch({
@@ -143,12 +143,15 @@ const T = () => {
     <>
       <Space style={{ marginBottom: 16, float: 'right' }} align='center'>
         <Button onClick={openAddModal}>新增</Button>
-        <Button onClick={handleSave}>保存</Button>
+        <Button disabled={dataGuarantee} danger={!dataGuarantee} onClick={handleSave}>
+          保存
+        </Button>
         {/* <Button>Clear filters and sorters</Button> */}
       </Space>
       <Divider orientation='left'>ERB Items</Divider>
 
       <List
+        className='no-webkit-drag'
         header={<div>Header</div>}
         // footer={<div>Footer</div>}
         bordered

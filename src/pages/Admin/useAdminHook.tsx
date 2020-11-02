@@ -1,33 +1,13 @@
 import * as React from 'react';
 import { copy } from '@Utils';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { DispatchActionType, ListItemType } from '@Types';
 import { message } from 'antd';
 
+import { useDataHook } from '@Models';
+
 const { useState, useEffect } = React;
 const { deepCopyOA } = copy;
-
-let originalData: Array<ListItemType> = [
-  // {
-  //   id: 0,
-  //   index: 0,
-  //   name: 'Zhihu',
-  //   type: 'ScrollList',
-  //   metas: {
-  //     title: {
-  //       dataIndex: 'title'
-  //     },
-  //     link: {
-  //       dataIndex: 'link'
-  //     }
-  //   },
-  //   locked: true,
-  //   visible: true
-  // }
-];
-
-// data = [...data, ...data, ...data, ...data, ...data];
-// data = [...data, ...data, ...data];
 
 const handleCopy = (d: any) => {
   let tmpArr: any = [];
@@ -65,7 +45,7 @@ const returnNewItem = (payload: any) => {
 const useAdminHook = () => {
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [formData, setFormData] = useState({});
-  const [data, setData] = useState(originalData);
+  const { data, dataGuarantee, dispatch: useDataDispatch } = useDataHook.useContainer();
   // 0: normal & 1: add & 2: edit
   const [mode, setMode] = useState(0);
 
@@ -81,17 +61,8 @@ const useAdminHook = () => {
 
     ipcRenderer.on('message-done', handleMessage);
 
-    const handleGet = (e: any, args: any) => {
-      setData(args.data);
-    };
-
-    ipcRenderer.on('list-item-data', handleGet);
-
-    ipcRenderer.send('get-list-item');
-
     return () => {
       ipcRenderer.removeListener('message-done', handleMessage);
-      ipcRenderer.removeListener('list-item-data', handleGet);
     };
   }, []);
 
@@ -121,29 +92,52 @@ const useAdminHook = () => {
         break;
       case 'ItemAdd':
         let newItem: ListItemType = returnNewItem(payload);
-        setData([...data, newItem]);
+        useDataDispatch({
+          type: 'setData',
+          payload: {
+            data: [...data, newItem]
+          }
+        });
         break;
       case 'ItemEdit':
         data[payload.index] = returnNewItem(payload);
 
-        setData(handleCopy(data)); // if not? tested
+        useDataDispatch({
+          type: 'setData',
+          payload: {
+            data: handleCopy(data)
+          }
+        });
         break;
       case 'ItemDelete':
-        setData(
-          handleCopy(
-            data.filter((item: any, index: number) => {
-              return payload.index !== index;
-            })
-          )
-        );
+        useDataDispatch({
+          type: 'setData',
+          payload: {
+            data: handleCopy(
+              data.filter((item: any, index: number) => {
+                return payload.index !== index;
+              })
+            )
+          }
+        });
         break;
       case 'ItemLock':
         data[payload.index].locked = true;
-        setData(handleCopy(data));
+        useDataDispatch({
+          type: 'setData',
+          payload: {
+            data: handleCopy(data)
+          }
+        });
         break;
       case 'ItemUnlock':
         data[payload.index].locked = false;
-        setData(handleCopy(data));
+        useDataDispatch({
+          type: 'setData',
+          payload: {
+            data: handleCopy(data)
+          }
+        });
         break;
       case 'ClearFormData':
         setFormData({});
@@ -155,6 +149,12 @@ const useAdminHook = () => {
         ipcRenderer.send('save-list-item', {
           data
         });
+        useDataDispatch({
+          type: 'setDataGuarantee',
+          payload: {
+            dataGuarantee: true
+          }
+        });
         break;
       default:
         break;
@@ -164,6 +164,7 @@ const useAdminHook = () => {
   return {
     createModalVisible,
     data,
+    dataGuarantee,
     formData,
     mode,
     dispatch

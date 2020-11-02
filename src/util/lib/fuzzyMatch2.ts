@@ -1,17 +1,9 @@
 import { ListItemInterface } from '@Types';
 
-const pickItem = (mode: number, list: any, i: number) => {
+const pickItem = (titleIndex: string, list: any, i: number) => {
   let item;
 
-  if (mode === 0) {
-    item = list[i].name;
-  }
-  if (mode === 1 || mode === 2 || mode === 4 || mode === 5 || mode === 6 || mode === 7) {
-    item = list[i].title;
-  }
-  if (mode === 3) {
-    item = list[i].link;
-  }
+  item = list[i][titleIndex];
 
   return item;
 };
@@ -40,13 +32,13 @@ const fuzzyMatches = (fuzzy: string, text: string) => {
   return matches;
 };
 
-const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
+const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, titleIndex: string) => {
   const results = [];
 
   for (let i = 0; i < list.length; i++) {
     const originalIndex = i;
 
-    let item = pickItem(mode, list, i);
+    let item = pickItem(titleIndex, list, i);
 
     const matches = fuzzyMatches(fuzzy, item);
 
@@ -91,10 +83,10 @@ const fuzzyList = (fuzzy: string, list: Array<ListItemInterface>, mode = 0) => {
   return results;
 };
 
-const transformData = (list: Array<any>, mode: number) => {
+const transformData = (list: Array<any>, titleIndex: string) => {
   let ret: Array<any> = [];
   for (let i = 0; i < list.length; i++) {
-    let item = pickItem(mode, list, i);
+    let item = pickItem(titleIndex, list, i);
 
     ret.push({
       ...list[i],
@@ -107,4 +99,4 @@ const transformData = (list: Array<any>, mode: number) => {
   return ret;
 };
 
-export { fuzzyMatches, fuzzyList, transformData, ListItemInterface };
+export { fuzzyMatches, fuzzyList, transformData };

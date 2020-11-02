@@ -38,14 +38,15 @@ const FormModal = (props: any) => {
             <Option value='ScrollList'>ScrollList</Option>
             <Option value='Music'>Music</Option>
             <Option value='Search'>Search</Option>
+            <Option value='Admin'>Admin</Option>
           </Select>
         </Item>
 
-        <Item label='Meta Title' name='title' rules={[{ required: true, message: 'Please meta title please!' }]}>
+        <Item label='Meta Title' name='title' rules={[{ required: false, message: 'Please meta title please!' }]}>
           <Input />
         </Item>
 
-        <Item label='Meta Link' name='link' rules={[{ required: true, message: 'Meta link please!' }]}>
+        <Item label='Meta Link' name='link' rules={[{ required: false, message: 'Meta link please!' }]}>
           <Input />
         </Item>
 

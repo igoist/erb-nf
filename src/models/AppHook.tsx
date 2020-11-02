@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
 import { createContainer } from 'unstated-next';
-import { ListItemInterface } from '@Types';
+import { ListItemInterface, ListItemType } from '@Types';
+import { useDataHook } from '@Models';
 
 import { useRequest } from 'ahooks';
 
@@ -11,52 +12,18 @@ declare var window: any;
 
 const originData: Array<ListItemInterface> = remote.getGlobal('sharedObject').originData;
 
-const AppArr: any = [
-  {
-    name: 'Apps',
-    mode: 0,
-    visible: false
-  },
-  {
-    name: 'Search',
-    mode: 1
-  },
-  {
-    name: 'Zhihu Hot',
-    mode: 2
-  },
-  {
-    name: 'Music',
-    mode: 3
-  },
-  {
-    name: 'Douban Renting',
-    mode: 4
-  },
-  {
-    name: 'v2ex topics',
-    mode: 5
-  },
-  {
-    name: 'v2ex node',
-    mode: 6,
-    visible: false
-  },
-  {
-    name: 'v2ex hot',
-    mode: 7
-  }
-];
-
 // const baseUrl = 'http://10.0.1.78:6085';
 const baseUrl = 'http://localhost:6085';
 
 type MCResultType = {
   mode: number,
-  list: Array<any>
+  list: Array<any>,
+  page?: number,
+  id?: number
 };
 
 const ff = (url: string) => {
+  console.log('ff: ', url);
   return fetch(url)
     .then((res: any) => res.json())
     .then((r: any) => {
@@ -72,71 +39,47 @@ const ff = (url: string) => {
     });
 };
 
-const handleSwitch = (mode: number, payload?: any) => {
+const handleSwitch = (mode: number, AppArr: Array<ListItemType>, payload: any = {}) => {
+  const item = AppArr[mode];
   return new Promise(async (resolve) => {
     let r: MCResultType;
     let list: any;
-    switch (mode) {
-      case 0:
-        r = {
-          mode,
-          list: AppArr.filter((item: any) => item.visible !== false)
-        };
-        break;
-      case 1:
-        r = {
-          mode,
-          list: originData
-        };
-        break;
-      case 2:
-        list = await ff(`${baseUrl}/api/v1/list/${0}/incognito`);
-        r = { mode, list };
-        break;
-      case 3:
-        r = { mode, list: [1, 2] };
-        break;
-      case 4:
-        list = await ff(`${baseUrl}/api/v1/renting/${0}/`);
-        r = { mode, list };
-        break;
-      case 5:
-        list = await ff(`${baseUrl}/api/v1/v2ex/nodes/`);
-        r = { mode, list };
-        break;
-      case 6:
-        console.log('enter case 6', payload);
-        list = await ff(`${baseUrl}/api/v1/v2ex/node/${payload.id}`);
-        r = { mode, list };
-        break;
-      case 7:
-        list = await ff(`${baseUrl}/api/v1/v2ex/hot/`);
-        r = { mode, list };
-        break;
-      default:
-        r = {
-          mode,
-          list: AppArr
-        };
-        break;
+
+    if (mode === -1) {
+      r = {
+        mode,
+        list: AppArr.filter((item: any) => item.visible !== false)
+      };
+    } else if (item && item.name === 'v2ex Node') {
+      if (payload.id === undefined) {
+        r = { mode, list: [] };
+      } else if (payload.page === undefined) {
+        list = await ff(`${baseUrl}/api/v1/v2ex/node/${payload.id}/?page=1`);
+        r = { mode, list, page: 1, id: payload.id };
+      } else {
+        list = await ff(`${baseUrl}/api/v1/v2ex/node/${payload.id}/?page=${payload.page}`);
+        r = { mode, list, page: payload.page, id: payload.id };
+      }
+    } else if (item && item.type === 'ScrollList') {
+      list = await ff(`${baseUrl}${item.api}`);
+      r = { mode, list };
+    } else {
+      r = { mode, list: [] };
     }
 
     window.r = r;
+
     setTimeout(() => {
       resolve(r);
     }, 300);
   });
 };
 
-const handleModeChange = (mode: number = 0, payload?: any): any => {
+const handleModeChange = (mode: number = 0, AppArr: Array<ListItemType> = [], payload?: any): any => {
   return new Promise(async (resolve) => {
     let tmpMode = mode;
 
-    if (tmpMode === AppArr.length) {
-      tmpMode = 0;
-    }
-
-    let r = await handleSwitch(tmpMode, payload);
+    let r = await handleSwitch(tmpMode, AppArr, payload);
     resolve(r);
   });
 };
@@ -144,15 +87,23 @@ const handleModeChange = (mode: number = 0, payload?: any): any => {
 const useAppHook = () => {
   const [value, setValue] = useState('');
   const [result, setResult] = useState([]);
-  const [mode, setMode] = useState(0);
+  const [mode, setMode] = useState(-1);
+  const { data: AppArr } = useDataHook.useContainer();
 
   const { data, error, loading, run } = useRequest(handleModeChange);
 
   useEffect(() => {
+    console.log('AppHook AppArr change: ', AppArr);
+    run(mode, AppArr);
+  }, [AppArr]);
+
+  useEffect(() => {
     setValue('');
     setResult([]);
-    if (mode !== 6) {
-      run(mode);
+
+    if (AppArr[mode] && AppArr[mode].name === 'v2ex Node') {
+    } else if (mode === -1 || (AppArr[mode] && AppArr[mode].type === 'ScrollList')) {
+      run(mode, AppArr);
     }
   }, [mode]);
 
@@ -165,11 +116,7 @@ const useAppHook = () => {
   };
 
   const toModeZero = () => {
-    setMode(0);
-  };
-
-  const getCurrentValue = () => {
-    return mode;
+    setMode(-1);
   };
 
   const dispatch = (action: any) => {
@@ -193,9 +140,16 @@ const useAppHook = () => {
         setResult(action.payload.result);
         break;
       case 'toV2Node':
-        setMode(6);
-        run(6, {
+        setMode(action.payload.mode);
+        run(action.payload.mode, AppArr, {
           id: action.payload.id
+        });
+        break;
+      case 'toV2NodeNextPage':
+        run(6, AppArr, {
+          id: action.payload.id,
+          page: action.payload.page,
+          list: action.payload.list
         });
         break;
       default:
@@ -204,6 +158,7 @@ const useAppHook = () => {
   };
 
   return {
+    AppArr,
     value,
     setValue,
     data: data || { list: [], mode: 0 },
@@ -214,13 +169,8 @@ const useAppHook = () => {
     mode,
     setMode,
     // toNextMode,
-    getCurrentValue,
     dispatch
   };
 };
 
-const AppHook = createContainer(useAppHook);
-
-export default AppHook;
-
-export { AppArr };
+export default createContainer(useAppHook);
