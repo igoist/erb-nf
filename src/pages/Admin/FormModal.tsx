@@ -39,6 +39,7 @@ const FormModal = (props: any) => {
             <Option value='Music'>Music</Option>
             <Option value='Search'>Search</Option>
             <Option value='Admin'>Admin</Option>
+            <Option value='PageGenerator'>PageGenerator</Option>
           </Select>
         </Item>
 
