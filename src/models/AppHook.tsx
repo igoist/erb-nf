@@ -51,9 +51,10 @@ const handleSwitch = (mode: number, AppArr: Array<ListItemType>, payload: any = 
         list: AppArr.filter((item: any) => item.visible !== false)
       };
     } else if (item && item.name === 'v2ex Node') {
-      if (payload.id === undefined) {
-        r = { mode, list: [] };
-      } else if (payload.page === undefined) {
+      // if (payload.id === undefined) {
+      //   r = { mode, list: [] };
+      // } else
+      if (payload.page === undefined) {
         list = await ff(`${baseUrl}/api/v1/v2ex/node/${payload.id}/?page=1`);
         r = { mode, list, page: 1, id: payload.id };
       } else {
@@ -90,7 +91,11 @@ const useAppHook = () => {
   const [mode, setMode] = useState(-1);
   const { data: AppArr } = useDataHook.useContainer();
 
-  const { data, error, loading, run } = useRequest(handleModeChange);
+  const { data, error, loading, run } = useRequest(handleModeChange, {
+    // manual: true,
+    // refreshDeps: [],
+    throttleInterval: 300
+  });
 
   useEffect(() => {
     console.log('AppHook AppArr change: ', AppArr);
@@ -102,6 +107,7 @@ const useAppHook = () => {
     setResult([]);
 
     if (AppArr[mode] && AppArr[mode].name === 'v2ex Node') {
+      console.log('should not do it automatically');
     } else if (mode === -1 || (AppArr[mode] && AppArr[mode].type === 'ScrollList')) {
       run(mode, AppArr);
     }
@@ -130,7 +136,6 @@ const useAppHook = () => {
         break;
       case 'save':
         setValue(action.payload.value);
-        // setResult(action.payload.result);
         break;
       case 'saveResult':
         setResult(action.payload.result);
@@ -141,15 +146,17 @@ const useAppHook = () => {
         break;
       case 'toV2Node':
         setMode(action.payload.mode);
+        console.log('========== toV2Node: ', action.payload);
         run(action.payload.mode, AppArr, {
           id: action.payload.id
         });
         break;
-      case 'toV2NodeNextPage':
+      case 'toV2NodePage':
+        console.log('========== toV2Page', action.payload);
         run(6, AppArr, {
           id: action.payload.id,
-          page: action.payload.page,
-          list: action.payload.list
+          page: action.payload.page
+          // list: action.payload.list
         });
         break;
       default:

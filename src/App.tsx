@@ -8,9 +8,11 @@ import { useAppHook } from '@Models';
 import { useDebounceFn } from 'ahooks';
 import { ScrollList } from '@Components';
 import { ListItemType } from '@Types';
-import { PictureWall, Admin } from './pages';
+import { PictureWall, Admin, PageGenerator } from './pages';
 
 const { useEffect, useRef } = React;
+
+const { ScrollListWithPagination, ScrollListWithKeyBoard } = ScrollList;
 
 const { fuzzyList, transformData } = fuzzyMatch2;
 
@@ -180,15 +182,31 @@ const App = () => {
   } else {
     ipcRenderer.send('change-win', { listHeight: 10 });
   }
+
+  const toPage = (page: number) => {
+    dispatch({
+      type: 'toV2NodePage',
+      payload: {
+        id: data.id,
+        page
+      }
+    });
+  };
+
   console.log('dd:', data);
+
   const renderMain = () => {
-    if (mode === -1 || (item && item.type === 'ScrollList')) {
-      return <ScrollList arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} />;
+    if (mode === 6) {
+      return <ScrollListWithPagination arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} toPage={toPage} />;
+    } else if (mode === -1 || (item && item.type === 'ScrollList')) {
+      return <ScrollListWithKeyBoard arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} />;
     } else if (item && item.name === 'Music') {
       // <VideoPlayer />
       return <AudioPlayer />;
     } else if (item && item.type === 'Admin') {
       return <Admin />;
+    } else if (item && item.type === 'PageGenerator') {
+      return <PageGenerator />;
     }
   };
 

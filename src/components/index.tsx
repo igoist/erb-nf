@@ -1,3 +1,3 @@
-import ScrollList from './ScrollList';
+import * as ScrollList from './ScrollList';
 
 export { ScrollList };
