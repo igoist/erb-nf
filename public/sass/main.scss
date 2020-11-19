@@ -10,6 +10,10 @@ body {
   overflow: hidden;
 }
 
+.no-webkit-drag {
+  -webkit-app-region: no-drag;
+}
+
 .clearfix {
   &:before,
   &:after {
@@ -115,7 +119,7 @@ $itemHeight: 56px;
   }
 
 
-  &.mode-0 {
+  &.type-apps {
     .searchBar-searchIcon {
       span {
         &:before {
@@ -125,7 +129,7 @@ $itemHeight: 56px;
     }
   }
 
-  &.mode-3 {
+  &.type-music {
     .searchBar-searchIcon {
       span {
         &:before {
@@ -206,5 +210,6 @@ $itemHeight: 56px;
 @import './components/_media';
 @import './components/_shake';
 @import './pages/_pictureswall';
+@import './pages/_pg';
 
 
