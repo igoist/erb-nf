@@ -3,14 +3,14 @@ import { Form, Input, Select } from 'antd';
 
 const { Option } = Select;
 
-const Editable = (props: any) => {
-  const { field, style } = props;
-  return (
-    <div>
-      {field}: {style[field]}
-    </div>
-  );
-};
+// const Editable = (props: any) => {
+//   const { field, style } = props;
+//   return (
+//     <div>
+//       {field}: {style[field]}
+//     </div>
+//   );
+// };
 
 const PanelR = (props: any) => {
   const { prefix } = props;
@@ -24,12 +24,34 @@ const PanelR = (props: any) => {
 
   //   return tmp;
   // };
+
+  const returnHandleValueChange = (field: string, fT: any) => {
+    return (e: any) => {
+      let v = e.target.value;
+
+      // how to validate
+      if (fT === 'number') {
+        v = parseInt(v);
+      }
+
+      if (typeof v === fT) {
+        dispatch({
+          type: 'ItemUpdate',
+          payload: {
+            field,
+            value: v
+          }
+        });
+      }
+    };
+  };
+
   const renderForm = (style: any) => {
     let tmp: any = [];
     for (let i in style) {
       tmp.push(
         <Form.Item label={i} name={i}>
-          <Input style={{ width: '80px' }} />
+          <Input style={{ width: '80px' }} onChange={returnHandleValueChange(i, typeof style[i])} />
         </Form.Item>
       );
     }

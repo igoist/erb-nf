@@ -44,11 +44,13 @@ const usePGHook = () => {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
 
   const dispatch = (action: DispatchActionType) => {
-    let tmp: any;
+    let tmp: any, item: any;
+    const { payload } = action;
+
     switch (action.type) {
       case 'ItemSelected':
-        let item = data.filter((item) => item.id === action.payload.id)[0];
-        setId(action.payload.id);
+        item = data.filter((item) => item.id === payload.id)[0];
+        setId(payload.id);
         setCoordinate({
           x: item.style.left || 0,
           y: item.style.top || 0
@@ -61,8 +63,19 @@ const usePGHook = () => {
       case 'ItemMove':
         tmp = data.map((item: ItemType) => {
           if (item.id === id) {
-            item.style.top = action.payload.top;
-            item.style.left = action.payload.left;
+            item.style.top = payload.top;
+            item.style.left = payload.left;
+          }
+
+          return deepCopyOA(item);
+        });
+
+        setData(tmp);
+        break;
+      case 'ItemUpdate':
+        tmp = data.map((item: any) => {
+          if (item.id === id) {
+            item.style[payload.field] = payload.value;
           }
 
           return deepCopyOA(item);
