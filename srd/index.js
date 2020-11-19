@@ -18,17 +18,6 @@ function pbcopy(data) {
 const winWidth = 800;
 const winHeightUnit = 56;
 let win = null;
-let winFlag = true;
-
-const hideOrShowWin = (ifShow) => {
-  if (ifShow) {
-    win.show();
-    winFlag = true;
-  } else {
-    win.hide();
-    winFlag = false;
-  }
-};
 
 function createWindow() {
   // 创建浏览器窗口
@@ -60,27 +49,27 @@ function createWindow() {
   const iconPath = path.join(path.join(path.resolve(__dirname, '../'), 'public/img'), iconName);
   appIcon = new Tray(iconPath);
 
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Event',
-      click: () => {
-        // event.sender.send('tray-removed')
-        console.log('Oh! Event!~');
-        hideOrShowWin(true);
-      }
-    },
-    {
-      label: 'Quit',
-      accelerator: 'CmdOrCtrl+E',
-      click: () => {
-        console.log('Oh! Quit!~');
-        app.quit();
-      }
-    }
-  ]);
+  // const contextMenu = Menu.buildFromTemplate([
+  //   {
+  //     label: 'Event',
+  //     click: () => {
+  //       // event.sender.send('tray-removed')
+  //       console.log('Oh! Event!~');
+  //       hideOrShowWin(true);
+  //     }
+  //   },
+  //   {
+  //     label: 'Quit',
+  //     accelerator: 'CmdOrCtrl+E',
+  //     click: () => {
+  //       console.log('Oh! Quit!~');
+  //       app.quit();
+  //     }
+  //   }
+  // ]);
 
-  appIcon.setToolTip('Electron Demo in the tray.');
-  appIcon.setContextMenu(contextMenu);
+  // appIcon.setToolTip('Electron Demo in the tray.');
+  // appIcon.setContextMenu(contextMenu);
   // =========================
 
   fs.readFile('./result.json', (err, data) => {
@@ -97,8 +86,7 @@ function createWindow() {
     win,
     winWidth,
     winHeightUnit,
-    screen: electron.screen,
-    hideOrShowWin
+    screen: electron.screen
   });
 
   // 打开开发者工具
@@ -107,20 +95,6 @@ function createWindow() {
 
 app.on('ready', createWindow);
 
-
-
 setTimeout(() => {
   app.dock.hide();
 }, 600);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  hideOrShowWin(true);
-});
-
-app.on('before-quit', () => (app.quitting = true));

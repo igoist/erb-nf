@@ -175,7 +175,9 @@ const App = () => {
 
   let tagH = result.length > 10 ? 10 : result.length;
 
-  if (mode === -1 || (item && item.type === 'ScrollList')) {
+  if (item && item.type === 'PageGenerator') {
+    // do nothing
+  } else if (mode === -1 || (item && item.type === 'ScrollList')) {
     ipcRenderer.send('change-win', {
       listHeight: tagH
     });
@@ -220,9 +222,13 @@ const App = () => {
     }
   };
 
+  const SS = () => {
+    return item && item.type === 'PageGenerator' ? { display: 'none' } : {};
+  };
+
   return (
     <>
-      <div id='inputWrapper'>
+      <div id='inputWrapper' style={SS()}>
         <input id='searchInput' value={value} onChange={(e) => handleChange(e)} ref={searchInput} />
         {loading ? (
           <Loading />

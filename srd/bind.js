@@ -7,7 +7,19 @@ const { BrowserWindow, globalShortcut } = electron;
 
 const bindEvents = (obj) => {
   console.log(obj);
-  const { app, ipcMain, win, winWidth, winHeightUnit, screen, hideOrShowWin } = obj;
+  const { app, ipcMain, win, winWidth, winHeightUnit, screen } = obj;
+
+  let winFlag = true;
+
+  const hideOrShowWin = (ifShow) => {
+    if (ifShow) {
+      win.show();
+      winFlag = true;
+    } else {
+      win.hide();
+      winFlag = false;
+    }
+  };
 
   ipcMain.on('change-win', (event, arg) => {
     let o = { x: 800, y: 56 };
@@ -75,21 +87,23 @@ const bindEvents = (obj) => {
       hideOrShowWin(true);
     }
   });
+
   globalShortcut.register('Alt+S', () => {
     win.webContents.send('focus-toggle');
   });
+
   // globalShortcut.register('Cmd+C', () => {
   //   exec('pbcopy', (err, stdout, stderr) => {
   //     if (err) {
   //       console.log('here');
   //       return ;
   //     }
-
   //     console.log(`stdout: ${stdout}`);
   //     console.log(`stderr: ${stderr}`);
   //   });
   //   // return false;
   // });
+
   globalShortcut.register('CmdOrCtrl+Y', () => {
     console.log('CmdOrCtrl+Y');
 
@@ -124,10 +138,21 @@ const bindEvents = (obj) => {
   globalShortcut.register('Ctrl+M', () => {
     win.webContents.send('mode-change');
   });
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit();
+    }
+  });
+
+  app.on('activate', () => {
+    hideOrShowWin(true);
+  });
+
+  app.on('before-quit', () => (app.quitting = true));
 };
 
 exports.bindEvents = bindEvents;
-
 
 let ttt;
 let tttF = true;

@@ -1,35 +1,33 @@
 import * as React from 'react';
 
-type useDragHookPropsType = {
-  // el?: any
-};
-
 const { useEffect, useState, useRef } = React;
 
 const useDragHook = () => {
-  const refEl = useRef();
-  const [f, setF] = useState(false);
+  const refBody = useRef();
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
+  const [xC, setXC] = useState(0);
+  const [yC, setYC] = useState(0);
 
   useEffect(() => {
-    const el: any = refEl.current;
+    const el: any = refBody.current;
 
-    console.log('el change', !!el);
-    console.log(refEl);
     if (el) {
-      console.log('enter bind');
+      const handleMouseMove = (e: any) => {
+        setXC(e.clientX);
+        setYC(e.clientY);
+      };
 
       const handleMouseDown = (e: any) => {
-        console.log('mouse down', e);
-        setF(true);
+        // console.log('mouse down', e);
         setX(e.clientX);
         setY(e.clientY);
+        el.addEventListener('mousemove', handleMouseMove);
       };
 
       const handleMouseUp = (e: any) => {
-        setF(false);
-        console.log('mouse up', e);
+        // console.log('mouse up', e);
+        el.removeEventListener('mousemove', handleMouseMove);
       };
 
       el.addEventListener('mousedown', handleMouseDown);
@@ -38,11 +36,12 @@ const useDragHook = () => {
       return () => {
         el.removeEventListener('mousedown', handleMouseDown);
         el.removeEventListener('mouseup', handleMouseUp);
+        el.removeEventListener('mousemove', handleMouseMove);
       };
     }
-  }, [refEl.current]);
+  }, [refBody.current]);
 
-  return { f, x, y, refEl };
+  return { x, y, xC, yC, refBody };
 };
 
 export default useDragHook;

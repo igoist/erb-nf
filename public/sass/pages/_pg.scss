@@ -71,7 +71,8 @@ $pg: 'pg';
     background-color: aqua;
   }
 
-  .#{$pg}-div {
-    -webkit-user-drag: element;
-  }
+  // .#{$pg}-w,
+  // .#{$pg}-div {
+  //   -webkit-user-drag: element;
+  // }
 }

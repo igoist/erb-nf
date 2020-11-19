@@ -22,7 +22,7 @@ const handleStyle = (style: any) => {
 };
 
 const ElementGenerator = (props: any) => {
-  const { prefix, id, type, style, refHook, onClick } = props;
+  const { prefix, id, type, style, selected, onClick } = props;
 
   let wStyle: any = {};
 
@@ -42,7 +42,7 @@ const ElementGenerator = (props: any) => {
     wStyle.left = `${style.left - 10}px`;
   }
 
-  if (refHook !== null) {
+  if (selected !== null) {
     wStyle.borderColor = '#ff00ff';
   }
 
@@ -50,7 +50,7 @@ const ElementGenerator = (props: any) => {
 
   if (type === 'div') {
     return (
-      <div className={`${prefix}-w`} style={wStyle} onClick={onClick} ref={refHook} data-id={id}>
+      <div className={`${prefix}-w`} style={wStyle} onClick={onClick} data-id={id}>
         <div className={`${prefix}-div`} style={handleStyle(style)}></div>
       </div>
     );
@@ -59,32 +59,7 @@ const ElementGenerator = (props: any) => {
 
 const W = (props: any) => {
   const { prefix } = props;
-  const { id, refEl, dispatch } = usePGHook();
-
-  const data = [
-    {
-      id: 0,
-      type: 'div',
-      style: {
-        top: 300,
-        right: 0,
-        width: 100,
-        height: 50,
-        backgroundColor: '#000'
-      }
-    },
-    {
-      id: 1,
-      type: 'div',
-      style: {
-        top: 400,
-        left: 0,
-        width: 100,
-        height: 50,
-        backgroundColor: '#000'
-      }
-    }
-  ];
+  const { data, id, refBody, dispatch } = usePGHook();
 
   const handleItemClick = (id: number) => {
     dispatch({
@@ -98,12 +73,12 @@ const W = (props: any) => {
   const renderData = () =>
     data.map((item) => {
       if (item.type === 'div') {
-        return <ElementGenerator {...item} prefix={prefix} onClick={() => handleItemClick(item.id)} refHook={id === item.id ? refEl : null}></ElementGenerator>;
+        return <ElementGenerator {...item} prefix={prefix} selected={item.id === id} onClick={() => handleItemClick(item.id)}></ElementGenerator>;
       }
     });
 
   return (
-    <div className={`${prefix}-main`}>
+    <div className={`${prefix}-main`} ref={refBody}>
       <div className='xx'>XXX</div>
       <div className={`${prefix}-w`}>
         <div className={`${prefix}-div`}></div>
