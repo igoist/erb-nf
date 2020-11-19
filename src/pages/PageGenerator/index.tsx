@@ -3,10 +3,19 @@ import { ipcRenderer } from 'electron';
 import W from './W';
 import PanelL from './PanelL';
 import PanelR from './PanelR';
+import usePGHook from './usePGHook';
 
 const { useEffect } = React;
 
+/**
+ * 最后可以添加一个左右 Panel 的设置页
+ * 比方左边显示的功能按钮可根据菜单勾选进行编辑
+ */
+
 const PG = () => {
+  const PGHook = usePGHook();
+  const { data, id, refBody, dispatch } = PGHook;
+
   useEffect(() => {
     ipcRenderer.send('change-win', {
       type: 'switch-pg',
@@ -28,10 +37,10 @@ const PG = () => {
 
   return (
     <div className='pg-wrap no-webkit-drag'>
-      <W {...parseProps} />
+      <W {...parseProps} {...PGHook} />
 
-      <PanelL {...parseProps} />
-      <PanelR {...parseProps} />
+      <PanelL {...parseProps} {...PGHook} />
+      <PanelR {...parseProps} {...PGHook} />
     </div>
   );
 };

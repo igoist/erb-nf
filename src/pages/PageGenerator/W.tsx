@@ -1,5 +1,5 @@
 import * as React from 'react';
-import usePGHook from './usePGHook';
+
 /**
  * 所有元素最后渲染出来都会附带 position: absolute 属性，所以...
  *
@@ -42,7 +42,7 @@ const ElementGenerator = (props: any) => {
     wStyle.left = `${style.left - 10}px`;
   }
 
-  if (selected !== null) {
+  if (selected) {
     wStyle.borderColor = '#ff00ff';
   }
 
@@ -59,7 +59,7 @@ const ElementGenerator = (props: any) => {
 
 const W = (props: any) => {
   const { prefix } = props;
-  const { data, id, refBody, dispatch } = usePGHook();
+  const { data, id, refBody, dispatch } = props;
 
   const handleItemClick = (id: number) => {
     dispatch({
@@ -71,7 +71,7 @@ const W = (props: any) => {
   };
 
   const renderData = () =>
-    data.map((item) => {
+    data.map((item: any) => {
       if (item.type === 'div') {
         return <ElementGenerator {...item} prefix={prefix} selected={item.id === id} onClick={() => handleItemClick(item.id)}></ElementGenerator>;
       }

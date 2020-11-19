@@ -6,22 +6,24 @@ $pg: 'pg';
   height: 100%;
   background-color: #fff;
 
+  .#{$pg}-panel-l,
+    .#{$pg}-panel-r {
+      position: fixed;
+      padding: 12px;
+      top: 0;
+      height: 700px;
+      background-color: #333;
+    }
+
   .#{$pg}-panel-l {
-    position: fixed;
-    top: 0;
     left: 0;
     width: 200px;
-    height: 500px;
-    background-color: #cccfff;
+    // background-color: #cccfff;
   }
 
   .#{$pg}-panel-r {
-    top: 0;
     right: 0;
-    position: fixed;
-    width: 200px;
-    height: 500px;
-    background-color: #333;
+    width: 300px;
   }
 
   .#{$pg}-main {

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const { useEffect, useState, useRef } = React;
 
-const useDragHook = () => {
+const useDragHook = (dispatch: any) => {
   const refBody = useRef();
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
@@ -28,6 +28,9 @@ const useDragHook = () => {
       const handleMouseUp = (e: any) => {
         // console.log('mouse up', e);
         el.removeEventListener('mousemove', handleMouseMove);
+        dispatch({
+          type: 'ItemRelease'
+        });
       };
 
       el.addEventListener('mousedown', handleMouseDown);
