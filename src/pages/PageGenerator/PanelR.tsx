@@ -12,6 +12,8 @@ const { Option } = Select;
 //   );
 // };
 
+const attrsArr = ['backgroundImage', 'text'];
+
 const PanelR = (props: any) => {
   const { prefix } = props;
   const { data, id, dispatch } = props;
@@ -46,7 +48,7 @@ const PanelR = (props: any) => {
     };
   };
 
-  const renderForm = (style: any) => {
+  const renderStyleItems = (style: any) => {
     let tmp: any = [];
     for (let i in style) {
       tmp.push(
@@ -89,7 +91,12 @@ const PanelR = (props: any) => {
           <div>id: {id}</div>
           <div>type: {item.type}</div>
           {/* {renderField(item.style)} */}
-          <Form initialValues={item.style}>{renderForm(item.style)}</Form>
+          <Form initialValues={{ ...item.style, text: item.text }}>
+            {renderStyleItems(item.style)}
+            <Form.Item label={'text'} name={'text'}>
+              <Input style={{ width: '80px' }} onChange={returnHandleValueChange('text', typeof 'string')} />
+            </Form.Item>
+          </Form>
         </>
       );
     } else {

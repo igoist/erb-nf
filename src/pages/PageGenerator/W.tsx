@@ -22,7 +22,7 @@ const handleStyle = (style: any) => {
 };
 
 const ElementGenerator = (props: any) => {
-  const { prefix, id, type, style, selected, onClick } = props;
+  const { prefix, id, type, style, selected, onClick, text } = props;
 
   let wStyle: any = {};
 
@@ -51,7 +51,9 @@ const ElementGenerator = (props: any) => {
   if (type === 'div') {
     return (
       <div className={`${prefix}-w`} style={wStyle} onClick={onClick} data-id={id}>
-        <div className={`${prefix}-div`} style={handleStyle(style)}></div>
+        <div className={`${prefix}-div`} style={handleStyle(style)}>
+          {text}
+        </div>
       </div>
     );
   }
@@ -73,7 +75,14 @@ const W = (props: any) => {
   const renderData = () =>
     data.map((item: any) => {
       if (item.type === 'div') {
-        return <ElementGenerator {...item} prefix={prefix} selected={item.id === id} onClick={() => handleItemClick(item.id)}></ElementGenerator>;
+        const props = {
+          prefix,
+          ...item,
+          selected: item.id === id,
+          text: item.style.text,
+          onClick: () => handleItemClick(item.id)
+        };
+        return <ElementGenerator {...props} />;
       }
     });
 

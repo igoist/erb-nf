@@ -97,11 +97,22 @@ const usePGHook = () => {
             left: 0,
             width: 100,
             height: 100,
-            backgroundColor: '#000'
+            backgroundColor: '#000',
+            text: ''
           }
         });
 
         setData(tmp);
+      case 'StoreData':
+        localStorage.setItem('pgData', JSON.stringify(data));
+        break;
+      case 'GetStoreData':
+        tmp = localStorage.getItem('pgData');
+        tmp = JSON.parse(tmp);
+        // console.log(tmp);
+
+        setData(tmp);
+        break;
       default:
         break;
     }

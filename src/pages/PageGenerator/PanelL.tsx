@@ -11,9 +11,23 @@ const PanelL = (props: any) => {
     });
   };
 
+  const storeData = () => {
+    dispatch({
+      type: 'StoreData'
+    });
+  };
+
+  const getStoreData = () => {
+    dispatch({
+      type: 'GetStoreData'
+    });
+  };
+
   return (
     <div className={`${prefix}-panel-l`}>
       <Button onClick={addDiv}>Add Div</Button>
+      <Button onClick={storeData}>Store Data</Button>
+      <Button onClick={getStoreData}>Get Store Data</Button>
     </div>
   );
 };
