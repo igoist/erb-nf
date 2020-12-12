@@ -1,6 +1,10 @@
 import * as React from 'react';
 import T from './T';
-import { Button, Image, Tabs } from 'antd';
+import T2 from './T2';
+import { Tabs } from 'antd';
+
+import TabLinkItem from './TabLinkItem';
+import TabLinkItemType from './TabLinkItemType';
 
 const { TabPane } = Tabs;
 
@@ -12,10 +16,13 @@ const A = () => {
           <T />
         </TabPane>
         <TabPane tab='Tab 2' key='2'>
-          Content of Tab Pane 2
+          <T2 />
         </TabPane>
-        <TabPane tab='Tab 3' key='3'>
-          Content of Tab Pane 3
+        <TabPane tab='TabLinkItem' key='TabLinkItem'>
+          <TabLinkItem />
+        </TabPane>
+        <TabPane tab='TabLinkItemType' key='TabLinkItemType'>
+          <TabLinkItemType />
         </TabPane>
       </Tabs>
     </div>
