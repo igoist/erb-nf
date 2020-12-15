@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Col, Form, Input, Row, Table, Select } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Table, Select } from 'antd';
 import { useAntdTable } from 'ahooks';
 
 const returnGetTableData = (api: any, dataFetch: any, handleRes: any) => {
@@ -54,63 +54,74 @@ const TableGenerator = (config: any) => {
       }
     });
 
-    const advanceSearchForm = (
-      <div>
-        <Form form={form}>
-          <Row gutter={24}>{tmpArr}</Row>
-          <Row>
-            <Form.Item style={{ width: '100%' }}>
-              {withSearch && (
-                <>
-                  <Button type='primary' style={{ float: 'right', marginLeft: 16 }} onClick={submit}>
-                    查询
-                  </Button>
-                  <Button onClick={reset} style={{ float: 'right' }}>
-                    重置
-                  </Button>
-                </>
-              )}
-              {addBtn && (
-                <Button>
-                  <a href={addBtn.url} target='_blank'>
-                    {addBtn.name}
-                  </a>
+    const BtnRow = () => {
+      if (withSearch || addBtn) {
+        return (
+          <Form.Item style={{ marginBottom: '0', width: '100%' }}>
+            {withSearch && (
+              <>
+                <Button type='primary' style={{ float: 'right', marginLeft: 16 }} onClick={submit}>
+                  查询
                 </Button>
-              )}
-              {/* <Button type="link" onClick={changeType}>
-                Simple Search
-              </Button> */}
-            </Form.Item>
-          </Row>
+                <Button onClick={reset} style={{ float: 'right' }}>
+                  重置
+                </Button>
+              </>
+            )}
+            {addBtn && (
+              <Button>
+                <a href={addBtn.url} target='_blank'>
+                  {addBtn.name}
+                </a>
+              </Button>
+            )}
+          </Form.Item>
+        );
+      } else {
+        return null;
+      }
+    };
+
+    const gutterLength = tmpArr.filter((item: any) => item !== null).length;
+    // const asfMarginBottom = gutterLength > 0 && (withSearch || addBtn) ? 24 : 0;
+    const asfMarginBottom = 0;
+
+    const advanceSearchForm = (
+      <Card bordered={false} style={{ margin: '12px 0' }}>
+        <Form form={form}>
+          <Row gutter={[12, asfMarginBottom]}>{tmpArr}</Row>
+          <BtnRow />
+        </Form>
+      </Card>
+    );
+
+    const searchForm = (
+      <div style={{ marginBottom: 16 }}>
+        <Form form={form} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {/* <Form.Item name="gender">
+            <Select style={{ width: 120, marginRight: 16 }} onChange={submit}>
+              <Option value="">all</Option>
+              <Option value="male">male</Option>
+              <Option value="female">female</Option>
+            </Select>
+          </Form.Item> */}
+          <Form.Item name='name'>
+            <Input.Search placeholder='enter name' style={{ width: 240 }} onSearch={submit} />
+          </Form.Item>
+          <Button type='link' onClick={changeType}>
+            Advanced Search
+          </Button>
         </Form>
       </div>
     );
 
-    // const searchForm = (
-    //   <div style={{ marginBottom: 16 }}>
-    //     <Form form={form} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-    //       {/* <Form.Item name="gender">
-    //         <Select style={{ width: 120, marginRight: 16 }} onChange={submit}>
-    //           <Option value="">all</Option>
-    //           <Option value="male">male</Option>
-    //           <Option value="female">female</Option>
-    //         </Select>
-    //       </Form.Item> */}
-    //       <Form.Item name="name">
-    //         <Input.Search placeholder="enter name" style={{ width: 240 }} onSearch={submit} />
-    //       </Form.Item>
-    //       <Button type="link" onClick={changeType}>
-    //         Advanced Search
-    //       </Button>
-    //     </Form>
-    //   </div>
-    // );
-
     return (
       <div>
         {/* {type === 'simple' ? searchForm : advanceSearchForm} */}
-        {/* {advanceSearchForm} */}
-        <Table columns={columns} rowKey={tableRowKey} {...tableProps} />
+        {advanceSearchForm}
+        <Card bordered={false} style={{ marginBottom: '12px' }}>
+          <Table columns={columns} rowKey={tableRowKey} {...tableProps} />
+        </Card>
       </div>
     );
   };
