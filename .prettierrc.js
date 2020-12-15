@@ -5,8 +5,8 @@ module.exports = {
   singleQuote: true,
   jsxSingleQuote: true,
   semi: true,
-  trailingComma: 'none',
+  // trailingComma: 'all',
   bracketSpacing: true, // 对象大括号直接是否有空格，默认为true，效果：{ foo: bar }
   jsxBracketSameLine: false,
-  parser: 'babel'
+  parser: 'babel',
 };

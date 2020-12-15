@@ -21,27 +21,30 @@ const returnGetTableData = (api: any, dataFetch: any, handleRes: any) => {
       .then((res) => res.json())
       .then((res) => ({
         total: res.list.length,
-        list: res.list
+        list: res.list,
       }));
   };
+};
+
+type tablePropsType = {
+  handleAddBtnClick?: any,
 };
 
 const TableGenerator = (config: any) => {
   const { columns, api, tableRowKey, addBtn, withSearch, dataFetch, handleRes } = config;
 
-  return () => {
+  return ({ handleAddBtnClick }: tablePropsType) => {
     const [form] = Form.useForm();
 
     const { tableProps, search } = useAntdTable(returnGetTableData(api, dataFetch, handleRes), {
       defaultPageSize: 10,
-      form
+      form,
     });
 
     const { type, changeType, submit, reset } = search;
 
     const tmpArr = columns.map((item: any) => {
       if (item.supportSearch) {
-        console.log(item.dataIndex, item.key);
         return (
           <Col key={'col-' + (item.dataIndex || item.key)} span={8}>
             <Form.Item label={item.title} name={item.dataIndex}>
@@ -68,13 +71,7 @@ const TableGenerator = (config: any) => {
                 </Button>
               </>
             )}
-            {addBtn && (
-              <Button>
-                <a href={addBtn.url} target='_blank'>
-                  {addBtn.name}
-                </a>
-              </Button>
-            )}
+            {addBtn && <Button onClick={handleAddBtnClick}>{addBtn.name}</Button>}
           </Form.Item>
         );
       } else {
