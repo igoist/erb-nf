@@ -209,6 +209,8 @@ const App = () => {
       return <Admin />;
     } else if (item && item.type === 'PageGenerator') {
       return <PageGenerator />;
+    } else if (item && item.type === 'PictureWall') {
+      return <PictureWall />;
     }
   };
 

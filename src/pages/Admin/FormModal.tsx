@@ -40,6 +40,7 @@ const FormModal = (props: any) => {
             <Option value='Search'>Search</Option>
             <Option value='Admin'>Admin</Option>
             <Option value='PageGenerator'>PageGenerator</Option>
+            <Option value='PictureWall'>PictureWall</Option>
           </Select>
         </Item>
 

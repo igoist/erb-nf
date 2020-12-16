@@ -35,10 +35,10 @@ class VideoPlayer extends React.Component<{}, {}> {
 
   render() {
     return (
-      <div className='video-wrap'>
+      <div className='media-wrap'>
         {/* <input type='file' ref={ this.mediaInput } /> */}
-        {/* <video src='test.mp4' className='media' ref={ this.media } width='56' height='56'></video> */}
-        <video src='test.mp4' className='media' ref={ this.media } width='56' height='56'></video>
+        {/* <video src='test_.mp4' className='media' ref={ this.media } width='56' height='56'></video> */}
+        <video src='t2.mp4' className='media' ref={ this.media } width='56' height='56'></video>
         <div className='control-group'>
           <button onClick={ () => this.play() }>play</button>
           <button onClick={ () => this.pause() }>pause</button>

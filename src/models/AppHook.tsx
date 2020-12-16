@@ -146,17 +146,14 @@ const useAppHook = () => {
         break;
       case 'toV2Node':
         setMode(action.payload.mode);
-        console.log('========== toV2Node: ', action.payload);
         run(action.payload.mode, AppArr, {
           id: action.payload.id
         });
         break;
       case 'toV2NodePage':
-        console.log('========== toV2Page', action.payload);
         run(6, AppArr, {
           id: action.payload.id,
           page: action.payload.page
-          // list: action.payload.list
         });
         break;
       default:

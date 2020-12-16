@@ -112,5 +112,29 @@
     "name": "v2ex Node",
     "type": "ScrollList",
     "visible": false
+  },
+  {
+    "id": 7,
+    "index": 7,
+    "locked": true,
+    "metas": {
+      "link": {},
+      "title": {}
+    },
+    "name": "PageGenerator",
+    "type": "PageGenerator",
+    "visible": true
+  },
+  {
+    "id": 8,
+    "index": 8,
+    "locked": true,
+    "metas": {
+      "link": {},
+      "title": {}
+    },
+    "name": "PictureWall",
+    "type": "PictureWall",
+    "visible": true
   }
 ]

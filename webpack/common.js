@@ -7,6 +7,7 @@ const srcPath = './src';
 const webpackConfig = {
   entry: {
     index: ['react-hot-loader/patch', path.resolve(path.resolve(__dirname, '..'), path.resolve(srcPath, 'index.tsx'))]
+    // index: path.resolve(path.resolve(__dirname, '..'), path.resolve(srcPath, 'index.tsx'))
   },
 
   target: 'electron-renderer',
@@ -25,6 +26,7 @@ const webpackConfig = {
     filename: '[name].bundle.min.js',
     path: path.resolve(path.resolve(__dirname, '..'), 'dist/'),
     publicPath
+    // hotUpdateChunkFilename: '[id].[hash].hot-update.js'
   },
 
   module: {

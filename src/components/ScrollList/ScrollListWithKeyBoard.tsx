@@ -21,7 +21,7 @@ const ScrollListWithKeyBoard = (props: SearchResultProps) => {
 
   const { list, start, end, current, targetIndex, refBox, setCurrent, setTargetIndex, setArr, intiateScrollObserver, getReference } = useScrollList({
     array: arr,
-    observer
+    observer,
   });
 
   // useEffect(() => {
@@ -114,6 +114,7 @@ const ScrollListWithKeyBoard = (props: SearchResultProps) => {
             onClick={() => handleItem(item.currentIndex)}
             dangerouslySetInnerHTML={{ __html: item.colored }}
             data-id={item.currentIndex}
+            title={item.excerpt}
           ></div>
         );
       })}
