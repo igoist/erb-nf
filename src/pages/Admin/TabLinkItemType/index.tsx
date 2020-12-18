@@ -1,6 +1,37 @@
 import * as React from 'react';
-import { TableGenerator, FormAdd } from '../components';
+import { TableGenerator, AntForm } from '../components';
 import useModelVisible from '../useModelVisible';
+import { message, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+const handleDelete = (item: any) => {
+  const { id, name } = item;
+  console.log('handleDelete', item);
+  Modal.confirm({
+    title: '标签删除确认',
+    icon: <ExclamationCircleOutlined />,
+    content: `确定删除 id: ${id}, 名称: "${name}" 的标签？`,
+    okText: '确认',
+    okType: 'danger',
+    cancelText: '取消',
+    onOk: async () => {
+      await fetch(`http://localhost:6085/api/v1/item/type/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).then((res) => {
+        console.log(`/api/v1/item/type/${id}:`, res);
+        if (res && res.status === 200) {
+          message.success('标签删除成功');
+          // run();
+        }
+      });
+    },
+    // onCancel: () => {}
+  });
+};
 
 const columns = [
   {
@@ -29,6 +60,7 @@ const columns = [
           <a href={`/admin/anchor/edit/${item.id}`} target='_blank' style={{ marginRight: '12px' }}>
             编辑
           </a>
+          <a onClick={() => handleDelete(item)}>删除</a>
         </>
       );
     },
@@ -109,7 +141,7 @@ export default () => {
   return (
     <>
       <TableMain {...tableMainProps} />
-      <FormAdd
+      <AntForm
         fields={addItemTypeFields}
         visible={visibleFormAddItemType}
         initialValues={{}}

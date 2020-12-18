@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TableGenerator, FormAdd } from '../components';
+import { TableGenerator, AntForm } from '../components';
 import useModelVisible from '../useModelVisible';
 
 const columns = [
@@ -13,16 +13,16 @@ const columns = [
     dataIndex: '',
     supportSearch: true,
     render: (item: any) => (
-      <a href={item.link} target='_blank'>
+      <a href={item.link} target='_blank' title={item.excerpt}>
         {item.title}
       </a>
     ),
   },
-  {
-    title: '摘要',
-    dataIndex: 'excerpt',
-    supportSearch: false,
-  },
+  // {
+  //   title: '摘要',
+  //   dataIndex: 'excerpt',
+  //   supportSearch: false,
+  // },
   {
     title: '操作',
     dataIndex: '',
@@ -125,7 +125,8 @@ export default () => {
   return (
     <>
       <TableMain {...tableMainProps} />
-      <FormAdd
+      <AntForm
+        title={'添加链接'}
         fields={addItemTypeFields}
         visible={visibleFormAddItemType}
         initialValues={{}}
