@@ -1,6 +1,37 @@
 import * as React from 'react';
 import { TableGenerator, AntForm } from '../components';
 import useModelVisible from '../useModelVisible';
+import { message, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+const handleDelete = (item: any) => {
+  const { id, title } = item;
+  console.log('handleDelete', item);
+  Modal.confirm({
+    title: '链接删除确认',
+    icon: <ExclamationCircleOutlined />,
+    content: `确定删除 id: ${id}, 标题: "${title}" 的链接？`,
+    okText: '确认',
+    okType: 'danger',
+    cancelText: '取消',
+    onOk: async () => {
+      await fetch(`http://localhost:6085/api/v1/item/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).then((res) => {
+        console.log(`/api/v1/item/${id}:`, res);
+        if (res && res.status === 200) {
+          message.success('链接删除成功');
+          // run();
+        }
+      });
+    },
+    // onCancel: () => {}
+  });
+};
 
 const columns = [
   {
@@ -31,9 +62,7 @@ const columns = [
     render: (item: any) => {
       return (
         <>
-          <a href={`/admin/anchor/edit/${item.id}`} target='_blank' style={{ marginRight: '12px' }}>
-            删除
-          </a>
+          <a onClick={() => handleDelete(item)}>删除</a>
         </>
       );
     },
