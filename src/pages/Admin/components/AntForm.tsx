@@ -89,7 +89,7 @@ const FormGenerator = ({ form, fields, initialValues, onFinish }: any) => {
       );
     } else if (item.type === 'Select') {
       let tmp = [];
-      const { options, placeholder, allowClear } = extra;
+      const { options, placeholder, allowClear, disabled } = extra;
       for (let i = 0; i < options.length; i++) {
         tmp.push(
           <Option key={i} value={options[i].value}>
@@ -100,7 +100,7 @@ const FormGenerator = ({ form, fields, initialValues, onFinish }: any) => {
 
       tmpInner = (
         <Form.Item {...itemPropsCommon} valuePropName={valuePropName}>
-          <Select placeholder={placeholder} allowClear={allowClear}>
+          <Select placeholder={placeholder} allowClear={allowClear} disabled={disabled}>
             {tmp}
           </Select>
         </Form.Item>

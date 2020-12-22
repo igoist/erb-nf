@@ -1,4 +1,5 @@
 import useModelVisible from '../useModelVisible';
+import { returnItemTypeStruct } from '../struct';
 
 const api = '/api/v1/item/type/';
 
@@ -24,21 +25,8 @@ export default () => {
     console.log('onFormAddItemTypeFinish msg: ', r);
   };
 
-  const addItemTypeFields = [
-    {
-      name: 'name',
-      label: '链接类型',
-      required: true,
-    },
-    {
-      name: 'sort',
-      label: '排序',
-      required: false,
-    },
-  ];
-
   return {
-    addItemTypeFields,
+    addItemTypeFields: returnItemTypeStruct(),
     visibleFormAddItemType,
     closeFormAddItemType,
     openFormAddItemType,
