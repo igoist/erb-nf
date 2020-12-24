@@ -2,10 +2,12 @@ import * as React from 'react';
 import { TableGenerator, AntForm } from '../components';
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import useFormAddItemType from './useFormAdd';
+import useFormAdd from './useFormAdd';
+import useFormEdit from './useFormEdit';
 
 export default () => {
-  const { addItemTypeFields, visibleFormAddItemType, closeFormAddItemType, openFormAddItemType, onFormAddItemTypeFinish } = useFormAddItemType();
+  const { addItemTypeFields, visibleFormAddItemType, closeFormAddItemType, openFormAddItemType, onFormAddItemTypeFinish } = useFormAdd();
+  const { editItemFields, visibleFormEditItem, initialValuesFormEdit, closeFormEditItem, openFormEditItem, onFormEditItemFinish } = useFormEdit();
 
   const tableMainProps = {
     handleAddBtnClick: openFormAddItemType,
@@ -69,6 +71,9 @@ export default () => {
       render: (item: any) => {
         return (
           <>
+            <a onClick={() => openFormEditItem(item)} style={{ marginRight: '12px' }}>
+              编辑
+            </a>
             <a onClick={() => handleDelete(item)}>删除</a>
           </>
         );
@@ -106,6 +111,14 @@ export default () => {
         initialValues={{}}
         onCancel={closeFormAddItemType}
         onFinish={onFormAddItemTypeFinish}
+      />
+      <AntForm
+        title='编辑标签'
+        fields={editItemFields}
+        visible={visibleFormEditItem}
+        initialValues={initialValuesFormEdit}
+        onCancel={closeFormEditItem}
+        onFinish={onFormEditItemFinish}
       />
     </>
   );

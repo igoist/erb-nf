@@ -33,6 +33,8 @@ type tablePropsType = {
 const TableGenerator = (config: any) => {
   const { columns, api, tableRowKey, addBtn, withSearch, dataFetch, handleRes } = config;
 
+  console.log('======== why enter?');
+
   return ({ handleAddBtnClick }: tablePropsType) => {
     const [form] = Form.useForm();
 
