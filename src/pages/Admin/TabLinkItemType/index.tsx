@@ -4,9 +4,18 @@ import { TableGenerator, AntForm } from '../components';
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFormAdd from './useFormAdd';
+import useFormEdit from './useFormEdit';
 
 export default () => {
   const { addItemTypeFields, visibleFormAddItemType, closeFormAddItemType, openFormAddItemType, onFormAddItemTypeFinish } = useFormAdd();
+  const {
+    editItemTypeFields,
+    visibleFormEditItemType,
+    initialValuesFormEdit,
+    closeFormEditItemType,
+    openFormEditItemType,
+    onFormEditItemTypeFinish,
+  } = useFormEdit();
 
   const tableMainProps = {
     handleAddBtnClick: openFormAddItemType,
@@ -65,7 +74,7 @@ export default () => {
       render: (item: any) => {
         return (
           <>
-            <a href={`/admin/anchor/edit/${item.id}`} target='_blank' style={{ marginRight: '12px' }}>
+            <a onClick={() => openFormEditItemType(item)} style={{ marginRight: '12px' }}>
               编辑
             </a>
             <a onClick={() => handleDelete(item)}>删除</a>
@@ -104,6 +113,13 @@ export default () => {
         initialValues={{}}
         onCancel={closeFormAddItemType}
         onFinish={onFormAddItemTypeFinish}
+      />
+      <AntForm
+        fields={editItemTypeFields}
+        visible={visibleFormEditItemType}
+        initialValues={initialValuesFormEdit}
+        onCancel={closeFormEditItemType}
+        onFinish={onFormEditItemTypeFinish}
       />
     </>
   );
