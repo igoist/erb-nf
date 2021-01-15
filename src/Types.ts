@@ -31,7 +31,8 @@ export type ListItemType = {
   metas: ListItemMetasType,
   api?: string,
   locked: boolean,
-  visible: boolean
+  visible: boolean,
+  isSearchHidden: boolean,
 };
 
 // App

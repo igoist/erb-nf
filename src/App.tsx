@@ -51,21 +51,21 @@ const App = () => {
     dispatch({
       type: 'saveResult',
       payload: {
-        result: ret
-      }
+        result: ret,
+      },
     });
   };
 
   const { run } = useDebounceFn(handleFuzzy, {
-    wait: 300
+    wait: 300,
   });
 
   const handleChange = (event: any) => {
     dispatch({
       type: 'save',
       payload: {
-        value: event.target.value
-      }
+        value: event.target.value,
+      },
     });
 
     run(event.target.value.trim());
@@ -73,7 +73,7 @@ const App = () => {
 
   const handleClick = () => {
     dispatch({
-      type: 'toModeZero'
+      type: 'toModeZero',
     });
   };
 
@@ -97,8 +97,8 @@ const App = () => {
         type: 'toV2Node',
         payload: {
           mode: tmpMode,
-          id: tmpItem.id
-        }
+          id: tmpItem.id,
+        },
       });
     } else {
       console.log(data.list[tmpItem.originalIndex].title);
@@ -122,7 +122,7 @@ const App = () => {
       console.log('mode-change: ', mode);
 
       dispatch({
-        type: 'toModeZero'
+        type: 'toModeZero',
       });
     };
 
@@ -135,8 +135,8 @@ const App = () => {
             type: 'saveResult',
             payload: {
               result: transformData(data.list, getTitleIndex(mode, AppArr)),
-              from: 'handleKeyDown'
-            }
+              from: 'handleKeyDown',
+            },
           });
         }
       }
@@ -146,8 +146,8 @@ const App = () => {
           payload: {
             value: '',
             result: [],
-            from: 'handleKeyDown'
-          }
+            from: 'handleKeyDown',
+          },
         });
       }
     };
@@ -179,7 +179,7 @@ const App = () => {
     // do nothing
   } else if (mode === -1 || (item && item.type === 'ScrollList')) {
     ipcRenderer.send('change-win', {
-      listHeight: tagH
+      listHeight: tagH,
     });
   } else {
     ipcRenderer.send('change-win', { listHeight: 10 });
@@ -190,8 +190,8 @@ const App = () => {
       type: 'toV2NodePage',
       payload: {
         id: data.id,
-        page
-      }
+        page,
+      },
     });
   };
 
@@ -225,7 +225,7 @@ const App = () => {
   };
 
   const SS = () => {
-    return item && item.type === 'PageGenerator' ? { display: 'none' } : {};
+    return item && item.isSearchHidden ? { display: 'none' } : {};
   };
 
   return (

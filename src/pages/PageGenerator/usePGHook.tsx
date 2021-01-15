@@ -10,7 +10,7 @@ const { useEffect, useState } = React;
 type ItemType = {
   id: number,
   type: string,
-  style: any
+  style: any,
 };
 
 const inititalData: Array<ItemType> = [
@@ -22,8 +22,8 @@ const inititalData: Array<ItemType> = [
       left: 700,
       width: 100,
       height: 50,
-      backgroundColor: '#000'
-    }
+      backgroundColor: '#000',
+    },
   },
   {
     id: 1,
@@ -33,9 +33,9 @@ const inititalData: Array<ItemType> = [
       left: 0,
       width: 100,
       height: 50,
-      backgroundColor: '#000'
-    }
-  }
+      backgroundColor: '#000',
+    },
+  },
 ];
 
 const usePGHook = () => {
@@ -53,7 +53,7 @@ const usePGHook = () => {
         setId(payload.id);
         setCoordinate({
           x: item.style.left || 0,
-          y: item.style.top || 0
+          y: item.style.top || 0,
         });
         break;
       case 'ItemRelease':
@@ -98,8 +98,8 @@ const usePGHook = () => {
             width: 100,
             height: 100,
             backgroundColor: '#000',
-            text: ''
-          }
+          },
+          text: '',
         });
 
         setData(tmp);
@@ -132,8 +132,8 @@ const usePGHook = () => {
         type: 'ItemMove',
         payload: {
           top: coordinate.y + yC - y,
-          left: coordinate.x + xC - x
-        }
+          left: coordinate.x + xC - x,
+        },
       });
     }
   }, [xC, yC]);

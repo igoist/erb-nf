@@ -19,7 +19,7 @@ const handleCopy = (d: any) => {
 
 type MSGType = {
   status: string,
-  msg: string
+  msg: string,
 };
 
 const returnNewItem = (payload: any) => {
@@ -30,15 +30,16 @@ const returnNewItem = (payload: any) => {
     type: payload.type,
     metas: {
       title: {
-        dataIndex: payload.title
+        dataIndex: payload.title,
       },
       link: {
-        dataIndex: payload.link
-      }
+        dataIndex: payload.link,
+      },
     },
     api: payload.api,
     locked: true,
-    visible: payload.visible
+    visible: payload.visible,
+    isSearchHidden: payload.isSearchHidden,
   };
 };
 
@@ -86,7 +87,8 @@ const useAdminHook = () => {
           type: item.type,
           title: item.metas.title.dataIndex,
           link: item.metas.link.dataIndex,
-          visible: item.visible
+          visible: item.visible,
+          isSearchHidden: item.isSearchHidden,
         });
         setCreateModalVisible(true);
         break;
@@ -95,8 +97,8 @@ const useAdminHook = () => {
         useDataDispatch({
           type: 'setData',
           payload: {
-            data: [...data, newItem]
-          }
+            data: [...data, newItem],
+          },
         });
         break;
       case 'ItemEdit':
@@ -105,8 +107,8 @@ const useAdminHook = () => {
         useDataDispatch({
           type: 'setData',
           payload: {
-            data: handleCopy(data)
-          }
+            data: handleCopy(data),
+          },
         });
         break;
       case 'ItemDelete':
@@ -117,8 +119,8 @@ const useAdminHook = () => {
               data.filter((item: any, index: number) => {
                 return payload.index !== index;
               })
-            )
-          }
+            ),
+          },
         });
         break;
       case 'ItemLock':
@@ -126,8 +128,8 @@ const useAdminHook = () => {
         useDataDispatch({
           type: 'setData',
           payload: {
-            data: handleCopy(data)
-          }
+            data: handleCopy(data),
+          },
         });
         break;
       case 'ItemUnlock':
@@ -135,8 +137,8 @@ const useAdminHook = () => {
         useDataDispatch({
           type: 'setData',
           payload: {
-            data: handleCopy(data)
-          }
+            data: handleCopy(data),
+          },
         });
         break;
       case 'ClearFormData':
@@ -147,13 +149,13 @@ const useAdminHook = () => {
         break;
       case 'SaveData':
         ipcRenderer.send('save-list-item', {
-          data
+          data,
         });
         useDataDispatch({
           type: 'setDataGuarantee',
           payload: {
-            dataGuarantee: true
-          }
+            dataGuarantee: true,
+          },
         });
         break;
       default:
@@ -167,7 +169,7 @@ const useAdminHook = () => {
     dataGuarantee,
     formData,
     mode,
-    dispatch
+    dispatch,
   };
 };
 

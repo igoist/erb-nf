@@ -8,7 +8,7 @@ const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 16 },
 };
 
 const FormModal = (props: any) => {
@@ -58,6 +58,10 @@ const FormModal = (props: any) => {
 
         <Item label='Visible' name='visible'>
           <Switch defaultChecked={initialValues.visible} />
+        </Item>
+
+        <Item label='IsSearchHidden' name='isSearchHidden'>
+          <Switch defaultChecked={initialValues.isSearchHidden} />
         </Item>
 
         <Item wrapperCol={{ offset: 8 }}>
