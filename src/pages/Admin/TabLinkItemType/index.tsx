@@ -108,6 +108,7 @@ export default () => {
     <>
       <TableMain {...tableMainProps} />
       <AntForm
+        title='添加标签'
         fields={addItemTypeFields}
         visible={visibleFormAddItemType}
         initialValues={{}}
@@ -115,6 +116,7 @@ export default () => {
         onFinish={onFormAddItemTypeFinish}
       />
       <AntForm
+        title='编辑标签'
         fields={editItemTypeFields}
         visible={visibleFormEditItemType}
         initialValues={initialValuesFormEdit}

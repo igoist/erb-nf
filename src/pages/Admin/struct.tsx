@@ -106,6 +106,9 @@ const returnItemStruct = (ifEdit: boolean = false) => {
     {
       name: 'id',
       label: 'ID',
+      style: {
+        display: 'none',
+      },
     },
     {
       name: 'title',
