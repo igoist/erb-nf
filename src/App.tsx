@@ -195,8 +195,7 @@ const App = () => {
     });
   };
 
-  console.log('dd:', data);
-
+  // item.type -> the real item component
   const renderMain = () => {
     if (mode === 6) {
       return <ScrollListWithPagination arr={result} handleEnterKey={handleEnterKey} tagH={tagH} dispatch={dispatch} payload={data} toPage={toPage} />;
@@ -214,6 +213,7 @@ const App = () => {
     }
   };
 
+  // the right icon type(set at here, or at admin)
   const returnType = (mode: number) => {
     if (mode === -1) {
       return 'apps';
@@ -224,13 +224,14 @@ const App = () => {
     }
   };
 
-  const SS = () => {
+  // if the search bar should be hidden
+  const returnInputWrapperStyle = () => {
     return item && item.isSearchHidden ? { display: 'none' } : {};
   };
 
   return (
     <>
-      <div id='inputWrapper' style={SS()}>
+      <div id='inputWrapper' style={returnInputWrapperStyle()}>
         <input id='searchInput' value={value} onChange={(e) => handleChange(e)} ref={searchInput} />
         {loading ? (
           <Loading />

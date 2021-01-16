@@ -4,12 +4,12 @@ import { returnItemStruct } from '../struct';
 const api = '/api/v1/item/';
 
 export default () => {
-  const { visible: visibleFormAddItemType, closeModel: closeFormAddItemType, openModel: openFormAddItemType } = useModelVisible();
+  const { visible: visibleFormAddItem, closeModel: closeFormAddItem, openModel: openFormAddItem } = useModelVisible();
 
-  const onFormAddItemTypeFinish = async (values: any) => {
-    closeFormAddItemType();
+  const onFormAddItemFinish = async (values: any) => {
+    closeFormAddItem();
 
-    console.log('onFormAddItemTypeFinish: ', values);
+    console.log('onFormAddItemFinish: ', values);
 
     let r = await fetch(`http://localhost:6085${api}`, {
       method: 'POST',
@@ -22,16 +22,16 @@ export default () => {
       .then((res) => res.json())
       .then((res) => res);
 
-    console.log('onFormAddItemTypeFinish msg: ', r);
+    console.log('onFormAddItemFinish msg: ', r);
   };
 
-  const addItemTypeFields = returnItemStruct();
+  const addItemFields = returnItemStruct();
 
   return {
-    addItemTypeFields,
-    visibleFormAddItemType,
-    closeFormAddItemType,
-    openFormAddItemType,
-    onFormAddItemTypeFinish,
+    addItemFields,
+    visibleFormAddItem,
+    closeFormAddItem,
+    openFormAddItem,
+    onFormAddItemFinish,
   };
 };

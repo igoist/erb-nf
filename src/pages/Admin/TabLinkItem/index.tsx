@@ -6,11 +6,11 @@ import useFormAdd from './useFormAdd';
 import useFormEdit from './useFormEdit';
 
 export default () => {
-  const { addItemTypeFields, visibleFormAddItemType, closeFormAddItemType, openFormAddItemType, onFormAddItemTypeFinish } = useFormAdd();
+  const { addItemFields, visibleFormAddItem, closeFormAddItem, openFormAddItem, onFormAddItemFinish } = useFormAdd();
   const { editItemFields, visibleFormEditItem, initialValuesFormEdit, closeFormEditItem, openFormEditItem, onFormEditItemFinish } = useFormEdit();
 
   const tableMainProps = {
-    handleAddBtnClick: openFormAddItemType,
+    handleAddBtnClick: openFormAddItem,
   };
 
   const handleDelete = (item: any) => {
@@ -106,11 +106,11 @@ export default () => {
       <TableMain {...tableMainProps} />
       <AntForm
         title={'添加链接'}
-        fields={addItemTypeFields}
-        visible={visibleFormAddItemType}
+        fields={addItemFields}
+        visible={visibleFormAddItem}
         initialValues={{}}
-        onCancel={closeFormAddItemType}
-        onFinish={onFormAddItemTypeFinish}
+        onCancel={closeFormAddItem}
+        onFinish={onFormAddItemFinish}
       />
       <AntForm
         title='编辑标签'
