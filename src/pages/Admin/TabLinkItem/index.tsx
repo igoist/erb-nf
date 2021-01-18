@@ -5,14 +5,25 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFormAdd from './useFormAdd';
 import useFormEdit from './useFormEdit';
 
+import { returnItemStruct } from '../struct';
+
 const { useMemo } = React;
 
 export default () => {
-  const { addItemFields, visibleFormAddItem, closeFormAddItem, openFormAddItem, onFormAddItemFinish } = useFormAdd();
-  const { editItemFields, visibleFormEditItem, initialValuesFormEdit, closeFormEditItem, openFormEditItem, onFormEditItemFinish } = useFormEdit();
+  const api = '/api/v1/item/';
+
+  const { addFields, visibleFormAdd, closeFormAdd, openFormAdd, onFormAddFinish } = useFormAdd({
+    api,
+    fieldsStruct: returnItemStruct(),
+  });
+
+  const { editFields, visibleFormEdit, initialValuesFormEdit, closeFormEdit, openFormEdit, onFormEditFinish } = useFormEdit({
+    api,
+    fieldsStruct: returnItemStruct(true),
+  });
 
   const tableMainProps = {
-    handleAddBtnClick: openFormAddItem,
+    handleAddBtnClick: openFormAdd,
   };
 
   let X: any;
@@ -77,7 +88,7 @@ export default () => {
       render: (item: any) => {
         return (
           <>
-            <a onClick={() => openFormEditItem(item)} style={{ marginRight: '12px' }}>
+            <a onClick={() => openFormEdit(item)} style={{ marginRight: '12px' }}>
               编辑
             </a>
             <a onClick={() => handleDelete(item)}>删除</a>
@@ -86,8 +97,6 @@ export default () => {
       },
     },
   ];
-
-  const api = '/api/v1/item/';
 
   const addBtn = {
     name: '添加链接',
@@ -131,34 +140,34 @@ export default () => {
     () => (
       <AntForm
         title={'添加链接'}
-        fields={addItemFields}
-        visible={visibleFormAddItem}
+        fields={addFields}
+        visible={visibleFormAdd}
         initialValues={{}}
-        onCancel={closeFormAddItem}
+        onCancel={closeFormAdd}
         onFinish={async (values: any) => {
-          await onFormAddItemFinish(values);
+          await onFormAddFinish(values);
           X.fns.refresh();
         }}
       />
     ),
-    [visibleFormAddItem]
+    [visibleFormAdd]
   );
 
   const FormEdit = useMemo(
     () => (
       <AntForm
         title='编辑标签'
-        fields={editItemFields}
-        visible={visibleFormEditItem}
+        fields={editFields}
+        visible={visibleFormEdit}
         initialValues={initialValuesFormEdit}
-        onCancel={closeFormEditItem}
+        onCancel={closeFormEdit}
         onFinish={async (values: any) => {
-          await onFormEditItemFinish(values);
+          await onFormEditFinish(values);
           X.fns.refresh();
         }}
       />
     ),
-    [visibleFormEditItem]
+    [visibleFormEdit]
   );
 
   return (

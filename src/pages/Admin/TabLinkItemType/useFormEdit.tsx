@@ -1,27 +1,26 @@
 import * as React from 'react';
 import useModelVisible from '../useModelVisible';
-import { returnItemTypeStruct } from '../struct';
+
+import { UseFormEditProps } from '@Types';
 
 const { useState } = React;
 
-const api = '/api/v1/item/type/';
-
-export default () => {
+export default ({ api, fieldsStruct }: UseFormEditProps) => {
   const [initialValues, setInitialValues] = useState(null);
-  const { visible: visibleFormEditItemType, closeModel: closeFormEditItemType, openModel } = useModelVisible();
+  const { visible: visibleFormEdit, closeModel: closeFormEdit, openModel } = useModelVisible();
 
-  const openFormEditItemType = (item: any) => {
-    console.log('openFormEditItemType: ', item);
+  const openFormEdit = (item: any) => {
+    console.log('openFormEdit: ', item);
 
     setInitialValues(item);
 
     openModel();
   };
 
-  const onFormEditItemTypeFinish = async (values: any) => {
-    closeFormEditItemType();
+  const onFormEditFinish = async (values: any) => {
+    closeFormEdit();
 
-    console.log('onFormEditItemTypeFinish: ', values);
+    console.log('onFormEditFinish: ', values);
 
     let id = values.id;
 
@@ -38,15 +37,15 @@ export default () => {
       .then((res) => res.json())
       .then((res) => res);
 
-    console.log('onFormEditItemTypeFinish msg: ', r);
+    console.log('onFormEditFinish msg: ', r);
   };
 
   return {
-    editItemTypeFields: returnItemTypeStruct(true),
-    visibleFormEditItemType,
+    editFields: fieldsStruct, // returnItemTypeStruct(true),
+    visibleFormEdit,
     initialValuesFormEdit: initialValues,
-    closeFormEditItemType,
-    openFormEditItemType,
-    onFormEditItemTypeFinish,
+    closeFormEdit,
+    openFormEdit,
+    onFormEditFinish,
   };
 };

@@ -59,3 +59,13 @@ export interface SearchResultState {
   targetIndex: number,
   current?: number
 }
+
+export type UseFormAddProps = {
+  api: string,
+  fieldsStruct: any
+}
+
+export type UseFormEditProps = {
+  api: string,
+  fieldsStruct: any
+}
