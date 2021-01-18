@@ -5,21 +5,26 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFormAdd from './useFormAdd';
 import useFormEdit from './useFormEdit';
 
-import { returnItemStruct } from '../struct';
-
 const { useMemo } = React;
 
-export default () => {
-  const api = '/api/v1/item/';
+type APropsType = {
+  api: string,
+  label: string,
+  returnStruct: any,
+  columnsMain: Array<any>,
+};
+
+const A = ({ api, label, returnStruct, columnsMain }: APropsType) => {
+  console.log('enter 11');
 
   const { addFields, visibleFormAdd, closeFormAdd, openFormAdd, onFormAddFinish } = useFormAdd({
     api,
-    fieldsStruct: returnItemStruct(),
+    fieldsStruct: returnStruct(),
   });
 
   const { editFields, visibleFormEdit, initialValuesFormEdit, closeFormEdit, openFormEdit, onFormEditFinish } = useFormEdit({
     api,
-    fieldsStruct: returnItemStruct(true),
+    fieldsStruct: returnStruct(true),
   });
 
   const tableMainProps = {
@@ -29,26 +34,26 @@ export default () => {
   let X: any;
 
   const handleDelete = (item: any) => {
-    const { id, title } = item;
+    const { id, name } = item;
     console.log('handleDelete', item);
     Modal.confirm({
-      title: '链接删除确认',
+      title: `${label}删除确认`,
       icon: <ExclamationCircleOutlined />,
-      content: `确定删除 id: ${id}, 标题: "${title}" 的链接？`,
+      content: `确定删除 id: ${id}, 名称: "${name}" 的${label}？`,
       okText: '确认',
       okType: 'danger',
       cancelText: '取消',
       onOk: async () => {
-        await fetch(`http://localhost:6085/api/v1/item/${id}`, {
+        await fetch(`http://localhost:6085${api}${id}`, {
           method: 'DELETE',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
         }).then((res) => {
-          console.log(`/api/v1/item/${id}:`, res);
+          console.log(`${api}${id}:`, res);
           if (res && res.status === 200) {
-            message.success('链接删除成功');
+            message.success(`${label}删除成功`);
             // run();
             // use the X.fns.refresh after it has been assigned, so we can define it first
             X.fns.refresh();
@@ -60,26 +65,7 @@ export default () => {
   };
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      supportSearch: true,
-    },
-    {
-      title: '标题',
-      dataIndex: '',
-      supportSearch: true,
-      render: (item: any) => (
-        <a href={item.link} target='_blank' title={item.excerpt}>
-          {item.title}
-        </a>
-      ),
-    },
-    // {
-    //   title: '摘要',
-    //   dataIndex: 'excerpt',
-    //   supportSearch: false,
-    // },
+    ...columnsMain,
     {
       title: '操作',
       dataIndex: '',
@@ -99,7 +85,7 @@ export default () => {
   ];
 
   const addBtn = {
-    name: '添加链接',
+    name: `添加${label}`,
     type: 'model',
   };
 
@@ -108,6 +94,7 @@ export default () => {
   const tmpC = columns.filter((item) => item.supportSearch);
   const withSearch = tmpC.length > 0;
 
+  // Snippet with useMemo
   // const [fns, TheRealTable] = useMemo(() => {
   //   console.log('here X');
   //   const TableMain = TableGenerator({
@@ -125,6 +112,7 @@ export default () => {
   //   return [X.fns, X.component];
   // }, []);
 
+  // Snippet without useMemo
   const TableMain = TableGenerator({
     columns,
     api,
@@ -139,7 +127,7 @@ export default () => {
   const FormAdd = useMemo(
     () => (
       <AntForm
-        title={'添加链接'}
+        title={`添加${label}`}
         fields={addFields}
         visible={visibleFormAdd}
         initialValues={{}}
@@ -156,7 +144,7 @@ export default () => {
   const FormEdit = useMemo(
     () => (
       <AntForm
-        title='编辑标签'
+        title={`编辑${label}`}
         fields={editFields}
         visible={visibleFormEdit}
         initialValues={initialValuesFormEdit}
@@ -172,10 +160,43 @@ export default () => {
 
   return (
     <>
-      {/* {TheRealTable()} */}
       <TheRealTable />
       {FormAdd}
       {FormEdit}
     </>
   );
+};
+
+import { returnItemStruct } from '../struct';
+
+export default () => {
+  const props = {
+    api: '/api/v1/item/',
+    label: '链接',
+    returnStruct: returnItemStruct,
+    columnsMain: [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        supportSearch: true,
+      },
+      {
+        title: '标题',
+        dataIndex: '',
+        supportSearch: true,
+        render: (item: any) => (
+          <a href={item.link} target='_blank' title={item.excerpt}>
+            {item.title}
+          </a>
+        ),
+      },
+      // {
+      //   title: '摘要',
+      //   dataIndex: 'excerpt',
+      //   supportSearch: false,
+      // },
+    ],
+  };
+
+  return <A {...props} />;
 };

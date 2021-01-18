@@ -5,21 +5,26 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFormAdd from './useFormAdd';
 import useFormEdit from './useFormEdit';
 
-import { returnItemTypeStruct } from '../struct';
-
 const { useMemo } = React;
 
-export default () => {
-  const api = '/api/v1/item/type/';
+type APropsType = {
+  api: string,
+  label: string,
+  returnStruct: any,
+  columnsMain: Array<any>,
+};
+
+const A = ({ api, label, returnStruct, columnsMain }: APropsType) => {
+  console.log('enter 00');
 
   const { addFields, visibleFormAdd, closeFormAdd, openFormAdd, onFormAddFinish } = useFormAdd({
     api,
-    fieldsStruct: returnItemTypeStruct(),
+    fieldsStruct: returnStruct(),
   });
 
   const { editFields, visibleFormEdit, initialValuesFormEdit, closeFormEdit, openFormEdit, onFormEditFinish } = useFormEdit({
     api,
-    fieldsStruct: returnItemTypeStruct(true),
+    fieldsStruct: returnStruct(true),
   });
 
   const tableMainProps = {
@@ -32,23 +37,23 @@ export default () => {
     const { id, name } = item;
     console.log('handleDelete', item);
     Modal.confirm({
-      title: '标签删除确认',
+      title: `${label}删除确认`,
       icon: <ExclamationCircleOutlined />,
-      content: `确定删除 id: ${id}, 名称: "${name}" 的标签？`,
+      content: `确定删除 id: ${id}, 名称: "${name}" 的${label}？`,
       okText: '确认',
       okType: 'danger',
       cancelText: '取消',
       onOk: async () => {
-        await fetch(`http://localhost:6085/api/v1/item/type/${id}`, {
+        await fetch(`http://localhost:6085${api}${id}`, {
           method: 'DELETE',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
         }).then((res) => {
-          console.log(`/api/v1/item/type/${id}:`, res);
+          console.log(`${api}${id}:`, res);
           if (res && res.status === 200) {
-            message.success('标签删除成功');
+            message.success(`${label}删除成功`);
             // run();
             // use the X.fns.refresh after it has been assigned, so we can define it first
             X.fns.refresh();
@@ -60,21 +65,7 @@ export default () => {
   };
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      supportSearch: true,
-    },
-    {
-      title: '类型',
-      dataIndex: 'name',
-      supportSearch: true,
-    },
-    {
-      title: '排序',
-      dataIndex: 'sort',
-      supportSearch: false,
-    },
+    ...columnsMain,
     {
       title: '操作',
       dataIndex: '',
@@ -94,7 +85,7 @@ export default () => {
   ];
 
   const addBtn = {
-    name: '添加标签',
+    name: `添加${label}`,
     type: 'model',
   };
 
@@ -136,7 +127,7 @@ export default () => {
   const FormAdd = useMemo(
     () => (
       <AntForm
-        title='添加标签'
+        title={`添加${label}`}
         fields={addFields}
         visible={visibleFormAdd}
         initialValues={{}}
@@ -153,7 +144,7 @@ export default () => {
   const FormEdit = useMemo(
     () => (
       <AntForm
-        title='编辑标签'
+        title={`编辑${label}`}
         fields={editFields}
         visible={visibleFormEdit}
         initialValues={initialValuesFormEdit}
@@ -174,4 +165,33 @@ export default () => {
       {FormEdit}
     </>
   );
+};
+
+import { returnItemTypeStruct } from '../struct';
+
+export default () => {
+  const props = {
+    api: '/api/v1/item/type/',
+    label: '标签',
+    returnStruct: returnItemTypeStruct,
+    columnsMain: [
+      {
+        title: 'ID',
+        dataIndex: 'id',
+        supportSearch: true,
+      },
+      {
+        title: '类型',
+        dataIndex: 'name',
+        supportSearch: true,
+      },
+      {
+        title: '排序',
+        dataIndex: 'sort',
+        supportSearch: false,
+      },
+    ],
+  };
+
+  return <A {...props} />;
 };
