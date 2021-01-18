@@ -71,6 +71,7 @@
     "api": "/api/v1/v2ex/nodes/",
     "id": 4,
     "index": 4,
+    "isSearchHidden": true,
     "locked": true,
     "metas": {
       "link": {

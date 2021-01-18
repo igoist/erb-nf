@@ -33,12 +33,13 @@ type tablePropsType = {
 const TableGenerator = (config: any) => {
   const { columns, api, tableRowKey, addBtn, withSearch, dataFetch, handleRes } = config;
 
-  console.log('======== why enter?');
+  console.log('enter TableGenerator, think about when and why?', handleRes);
 
   return ({ handleAddBtnClick }: tablePropsType) => {
     const [form] = Form.useForm();
 
-    const { tableProps, search } = useAntdTable(returnGetTableData(api, dataFetch, handleRes), {
+    // 这个 refresh ahooks 里根本查不到, umi hooks
+    const { tableProps, refresh, search } = useAntdTable(returnGetTableData(api, dataFetch, handleRes), {
       defaultPageSize: 10,
       form,
     });
@@ -113,6 +114,20 @@ const TableGenerator = (config: any) => {
         </Form>
       </div>
     );
+
+    return {
+      fns: {
+        refresh: () => refresh(),
+      },
+      component: () => (
+        <div>
+          {advanceSearchForm}
+          <Card bordered={false} style={{ marginBottom: '12px' }}>
+            <Table columns={columns} rowKey={tableRowKey} {...tableProps} />
+          </Card>
+        </div>
+      ),
+    };
 
     return (
       <div>

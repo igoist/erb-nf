@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { TableGenerator, AntForm } from '../components';
-
 import { message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFormAdd from './useFormAdd';
 import useFormEdit from './useFormEdit';
+
+const { useMemo } = React;
 
 export default () => {
   const { addItemTypeFields, visibleFormAddItemType, closeFormAddItemType, openFormAddItemType, onFormAddItemTypeFinish } = useFormAdd();
@@ -20,6 +21,8 @@ export default () => {
   const tableMainProps = {
     handleAddBtnClick: openFormAddItemType,
   };
+
+  let X: any;
 
   const handleDelete = (item: any) => {
     const { id, name } = item;
@@ -43,6 +46,8 @@ export default () => {
           if (res && res.status === 200) {
             message.success('标签删除成功');
             // run();
+            // use the X.fns.refresh after it has been assigned, so we can define it first
+            X.fns.refresh();
           }
         });
       },
@@ -96,6 +101,25 @@ export default () => {
   const tmpC = columns.filter((item) => item.supportSearch);
   const withSearch = tmpC.length > 0;
 
+  // Snippet with useMemo
+  // const [fns, TheRealTable] = useMemo(() => {
+  //   console.log('here X');
+  //   const TableMain = TableGenerator({
+  //     columns,
+  //     api,
+  //     addBtn,
+  //     tableRowKey,
+  //     withSearch,
+  //   });
+
+  //   // return <TableMain {...tableMainProps} />;
+  //   const X: any = TableMain(tableMainProps);
+  //   console.log('here X: ', X);
+  //   console.log('here X: ', X.component);
+  //   return [X.fns, X.component];
+  // }, []);
+
+  // Snippet without useMemo
   const TableMain = TableGenerator({
     columns,
     api,
@@ -104,25 +128,48 @@ export default () => {
     withSearch,
   });
 
-  return (
-    <>
-      <TableMain {...tableMainProps} />
+  X = TableMain(tableMainProps);
+  const TheRealTable = X.component;
+
+  const FormAdd = useMemo(
+    () => (
       <AntForm
         title='添加标签'
         fields={addItemTypeFields}
         visible={visibleFormAddItemType}
         initialValues={{}}
         onCancel={closeFormAddItemType}
-        onFinish={onFormAddItemTypeFinish}
+        onFinish={async (values: any) => {
+          await onFormAddItemTypeFinish(values);
+          X.fns.refresh();
+        }}
       />
+    ),
+    [visibleFormAddItemType]
+  );
+
+  const FormEdit = useMemo(
+    () => (
       <AntForm
         title='编辑标签'
         fields={editItemTypeFields}
         visible={visibleFormEditItemType}
         initialValues={initialValuesFormEdit}
         onCancel={closeFormEditItemType}
-        onFinish={onFormEditItemTypeFinish}
+        onFinish={async (values: any) => {
+          await onFormEditItemTypeFinish(values);
+          X.fns.refresh();
+        }}
       />
+    ),
+    [visibleFormEditItemType]
+  );
+
+  return (
+    <>
+      <TheRealTable />
+      {FormAdd}
+      {FormEdit}
     </>
   );
 };
