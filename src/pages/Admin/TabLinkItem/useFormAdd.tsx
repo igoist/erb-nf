@@ -1,4 +1,4 @@
-import useModelVisible from '../useModelVisible';
+import { useModelVisible } from '@Hooks';
 
 import { UseFormAddProps } from '@Types';
 

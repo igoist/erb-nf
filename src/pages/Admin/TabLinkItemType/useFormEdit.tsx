@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useModelVisible from '../useModelVisible';
+import { useModelVisible } from '@Hooks';
 
 import { UseFormEditProps } from '@Types';
 

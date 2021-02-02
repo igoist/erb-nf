@@ -12,7 +12,6 @@ const { Option } = Select;
  * initialValues: form 的默认值
  * onFinish:      能够得到 form 各字段的值
  */
-
 const FormGenerator = ({ form, fields, initialValues, onFinish }: any) => {
   let formInner: any = [];
 

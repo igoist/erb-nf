@@ -13,6 +13,8 @@
       "@Components/*": ["src/components/*"],
       "@Models": ["src/models/"],
       "@Models/*": ["src/models/*"],
+      "@Hooks": ["src/hooks/"],
+      "@Hooks/*": ["src/hooks/*"],
       "@Utils": ["src/util/"],
       "@Utils/*": ["src/util/*"]
     }

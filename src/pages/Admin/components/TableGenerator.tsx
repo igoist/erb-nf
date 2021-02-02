@@ -121,6 +121,7 @@ const TableGenerator = (config: any) => {
       },
       component: () => (
         <div>
+          {/* {type === 'simple' ? searchForm : advanceSearchForm} */}
           {advanceSearchForm}
           <Card bordered={false} style={{ marginBottom: '12px' }}>
             <Table columns={columns} rowKey={tableRowKey} {...tableProps} />
@@ -128,16 +129,6 @@ const TableGenerator = (config: any) => {
         </div>
       ),
     };
-
-    return (
-      <div>
-        {/* {type === 'simple' ? searchForm : advanceSearchForm} */}
-        {advanceSearchForm}
-        <Card bordered={false} style={{ marginBottom: '12px' }}>
-          <Table columns={columns} rowKey={tableRowKey} {...tableProps} />
-        </Card>
-      </div>
-    );
   };
 };
 
