@@ -6,6 +6,7 @@ import T from './T';
 import T2 from './T2';
 import TabLinkItem from './TabLinkItem';
 import TabLinkItemType from './TabLinkItemType';
+import TabLinkItemZhihu from './TabLinkItemZhihu';
 
 const { TabPane } = Tabs;
 
@@ -27,18 +28,22 @@ const A = () => {
       name: 'TabLinkItemType',
       component: <TabLinkItemType />,
     },
+    {
+      name: 'TabLinkItemZhihu',
+      component: <TabLinkItemZhihu />,
+    },
   ];
 
   const tabsArrLength = tabsArr.length;
 
-  const [activeKeyIndex, setActiveKeyIndex] = React.useState(3);
+  const [activeKeyIndex, setActiveKeyIndex] = React.useState(tabsArrLength - 1);
 
   useKeyPress(['meta.shift.[', 'meta.['], () => {
-    setActiveKeyIndex((activeKeyIndex + tabsArrLength - 1) % 4);
+    setActiveKeyIndex((activeKeyIndex + tabsArrLength - 1) % tabsArrLength);
   });
 
   useKeyPress(['meta.shift.]', 'meta.]'], () => {
-    setActiveKeyIndex((activeKeyIndex + tabsArrLength + 1) % 4);
+    setActiveKeyIndex((activeKeyIndex + tabsArrLength + 1) % tabsArrLength);
   });
 
   const handleOnChange = (activeKey: any) => {

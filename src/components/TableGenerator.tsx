@@ -20,7 +20,7 @@ const returnGetTableData = (api: any, dataFetch: any, handleRes: any) => {
     return fetch(`http://localhost:6085${api}?${query}`)
       .then((res) => res.json())
       .then((res) => ({
-        total: res.list.length,
+        total: res.count !== undefined ? res.count : res.list.length,
         list: res.list,
       }));
   };
@@ -50,7 +50,7 @@ const TableGenerator = (config: any) => {
       if (item.supportSearch) {
         return (
           <Col key={'col-' + (item.dataIndex || item.key)} span={8}>
-            <Form.Item label={item.title} name={item.dataIndex}>
+            <Form.Item label={item.title} name={item.dataIndex || item.key}>
               <Input placeholder={item.title} />
             </Form.Item>
           </Col>
