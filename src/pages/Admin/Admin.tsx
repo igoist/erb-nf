@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ipcRenderer } from 'electron';
 import { Tabs } from 'antd';
 import { useKeyPress } from 'ahooks';
 
@@ -8,6 +9,7 @@ import TabLinkItem from './TabLinkItem';
 import TabLinkItemType from './TabLinkItemType';
 import TabLinkItemZhihu from './TabLinkItemZhihu';
 
+const { useEffect } = React;
 const { TabPane } = Tabs;
 
 const A = () => {
@@ -62,8 +64,23 @@ const A = () => {
     []
   );
 
+  // full screen
+  useEffect(() => {
+    ipcRenderer.send('change-win', {
+      type: 'switch-full-screen',
+      flag: true,
+    });
+
+    return () => {
+      ipcRenderer.send('change-win', {
+        type: 'switch-full-screen',
+        flag: false,
+      });
+    };
+  }, []);
+
   return (
-    <div style={{ padding: '20px', height: '560px', overflow: 'scroll' }}>
+    <div style={{ padding: '20px', height: 'calc(100vh - 8px)', overflow: 'scroll' }}>
       <Tabs activeKey={`tab-${activeKeyIndex}`} onChange={handleOnChange}>
         {TabPanes}
       </Tabs>

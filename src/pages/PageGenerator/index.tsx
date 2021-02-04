@@ -18,21 +18,21 @@ const PG = () => {
 
   useEffect(() => {
     ipcRenderer.send('change-win', {
-      type: 'switch-pg',
-      flag: true
+      type: 'switch-full-screen',
+      flag: true,
     });
 
     return () => {
       console.log('PG unmount');
       ipcRenderer.send('change-win', {
-        type: 'switch-pg',
-        flag: false
+        type: 'switch-full-screen',
+        flag: false,
       });
     };
   }, []);
 
   const parseProps = {
-    prefix: 'pg'
+    prefix: 'pg',
   };
 
   return (

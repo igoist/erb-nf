@@ -175,7 +175,8 @@ const App = () => {
 
   let tagH = result.length > 10 ? 10 : result.length;
 
-  if (item && item.type === 'PageGenerator') {
+  // 这里之后会有一个新标记区别是否 fullscreen (目前只有是全屏或不是全屏)
+  if (item && (item.type === 'PageGenerator' || item.type === 'Admin')) {
     // do nothing
   } else if (mode === -1 || (item && item.type === 'ScrollList')) {
     ipcRenderer.send('change-win', {
