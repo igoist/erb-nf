@@ -3,6 +3,7 @@ const utils = require('./utils');
 const { exec } = require('child_process');
 
 const { readFile, writeFile } = utils.file;
+const { getCurrentDisplay } = utils.screen;
 const { BrowserWindow, globalShortcut } = electron;
 
 const bindEvents = (obj) => {
@@ -21,15 +22,27 @@ const bindEvents = (obj) => {
     }
   };
 
+  /**
+   * 应用发送该事件之后, 分情况调整窗口尺寸、位置
+   * 注意 fullScreen 时需要通过 getCurrentDisplay 获得当前窗口
+   */
   ipcMain.on('change-win', (event, arg) => {
     let o = { x: 800, y: 56 };
     if (arg && arg.type) {
-      if (arg.type === 'switch-pg') {
+      if (arg.type === 'switch-full-screen') {
         if (arg.flag) {
-          console.log(screen.getPrimaryDisplay());
-          const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+          const ds = screen.getAllDisplays();
+          const { x, y } = win.getBounds();
+
+          const z = getCurrentDisplay({
+            ds,
+            x,
+            y,
+          });
+
+          const { width, height } = z.size;
+
           setTimeout(() => {
-            console.log(width, height);
             win.setSize(width, height);
             win.center();
           }, 60);
@@ -47,7 +60,7 @@ const bindEvents = (obj) => {
     let r = await readFile('./data.json');
 
     win.webContents.send('list-item-data', {
-      data: JSON.parse(r)
+      data: JSON.parse(r),
     });
   });
 
@@ -56,7 +69,7 @@ const bindEvents = (obj) => {
 
     win.webContents.send('message-done', {
       status: r ? 'success' : 'error',
-      msg: r ? '数据保存成功' : '数据保存失败'
+      msg: r ? '数据保存成功' : '数据保存失败',
     });
   });
 
@@ -115,8 +128,8 @@ const bindEvents = (obj) => {
       skipTaskbar: true,
       resizable: true,
       webPreferences: {
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+      },
     });
 
     tmpWin.on('close', () => {
@@ -188,8 +201,8 @@ const biuBiu = (e, args) => {
       resizable: false,
       transparent: true,
       webPreferences: {
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+      },
     });
 
     ttt.on('close', () => {
