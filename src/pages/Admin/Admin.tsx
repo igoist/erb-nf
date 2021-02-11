@@ -8,9 +8,11 @@ import T2 from './T2';
 import TabLinkItem from './TabLinkItem';
 import TabLinkItemType from './TabLinkItemType';
 import TabLinkItemZhihu from './TabLinkItemZhihu';
+import { dom } from '@Utils';
 
 const { useEffect } = React;
 const { TabPane } = Tabs;
+const { scrollSmothlyTo } = dom;
 
 const A = () => {
   const tabsArr = [
@@ -48,6 +50,14 @@ const A = () => {
     setActiveKeyIndex((activeKeyIndex + tabsArrLength + 1) % tabsArrLength);
   });
 
+  useKeyPress(['ctrl.j'], () => {
+    scrollSmothlyTo(100);
+  });
+
+  useKeyPress(['ctrl.k'], () => {
+    scrollSmothlyTo(-100);
+  });
+
   const handleOnChange = (activeKey: any) => {
     console.log(activeKey);
 
@@ -80,7 +90,7 @@ const A = () => {
   }, []);
 
   return (
-    <div style={{ padding: '20px', height: 'calc(100vh - 8px)', overflow: 'scroll' }}>
+    <div style={{ padding: '20px' }}>
       <Tabs activeKey={`tab-${activeKeyIndex}`} onChange={handleOnChange}>
         {TabPanes}
       </Tabs>
