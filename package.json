@@ -7,6 +7,7 @@
     "build": "webpack",
     "build:dll": "webpack --config webpack/dll.js",
     "dev": "webpack-dev-server --config webpack/dev.js",
+    "dev2": "webpack --config webpack/dev2.js --watch",
     "start": "electron srd"
   },
   "keywords": [
@@ -19,10 +20,14 @@
     "ahooks": "^2.5.0",
     "antd": "^4.7.0",
     "electron": "^5.0.4",
+    "immer": "^9.0.2",
+    "rc-tooltip": "^5.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "typescript": "^3.9.7"
+    "three": "^0.127.0",
+    "typescript": "^3.9.7",
+    "use-immer": "^0.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

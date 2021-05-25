@@ -29,14 +29,20 @@ function createWindow() {
     //   webSecurity: false
     // },
     title: 'ElectronFzf',
-    // backgroundColor: '#80FFFFFF',
-    // transparent: true,
+    backgroundColor: '#00000000',
+    transparent: true,
     frame: false,
     resizable: false,
     webPreferences: {
-      nodeIntegration: true
-    }
+      // preload: path.join(__dirname, 'ttt.js'),
+      preload: path.resolve(__dirname, '../dist/dll/react.dll.js'),
+      // preload: 'http://localhost:3101/pinit.bundle.min.js',
+      nodeIntegration: true,
+      webviewTag: true,
+    },
   });
+
+  console.log('here preload', path.resolve(__dirname, '../dist/pinit.bundle.min.js'));
 
   // 然后加载应用的 index.html。
   win.loadURL('http://localhost:3101/index.html');
@@ -76,7 +82,7 @@ function createWindow() {
     if (err) throw err;
     let tmp = JSON.parse(data);
     global.sharedObject = {
-      originData: tmp
+      originData: tmp,
     };
   });
 
@@ -86,7 +92,7 @@ function createWindow() {
     win,
     winWidth,
     winHeightUnit,
-    screen: electron.screen
+    screen: electron.screen,
   });
 
   // 打开开发者工具

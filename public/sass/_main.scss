@@ -1,0 +1,43 @@
+@charset 'utf-8';
+
+/**
+  * abstracts/
+  * vendors/
+  * base/
+  * layout/
+  * components/
+  * pages/
+  * themes/
+  */
+
+@import 'abstracts/_variables';
+// @import 'mixin/_tabs';
+
+@import 'base/_animation';
+@import 'base/_reset';
+@import 'base/_common';
+
+// @import 'layout/_navigator';
+// @import 'layout/_banner';
+// @import 'layout/_footer';
+
+// @import 'components/_button';
+// @import 'components/_coupon';
+// @import 'components/_course-material';
+// @import 'components/_modal';
+// @import 'components/_message';
+// @import 'components/_notification';
+// @import 'components/_pagination';
+// @import 'components/_popover';
+// @import 'components/_radio';
+// @import 'components/_rating';
+// @import 'components/_select';
+// @import 'components/_spinner';
+// @import 'components/_switch';
+// @import 'components/_tabs';
+// @import 'components/_tools-fixed';
+// @import 'components/_upload';
+
+@import 'components/_loading';
+@import 'components/_media';
+@import 'components/_shake';

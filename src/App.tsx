@@ -8,7 +8,7 @@ import { useAppHook } from '@Models';
 import { useDebounceFn } from 'ahooks';
 import { ScrollList } from '@Components';
 import { ListItemType } from '@Types';
-import { PictureWall, Admin, PageGenerator } from './pages';
+import { Admin, Demo, PictureWall, PageGenerator } from './pages';
 
 const { useEffect, useRef } = React;
 
@@ -121,12 +121,25 @@ const App = () => {
       // handleDispatch()
       console.log('mode-change: ', mode);
 
+      if (item.type === 'Demo') {
+        // do something else
+        ipcRenderer.send('et-fade-leave', {});
+      } else {
+        dispatch({
+          type: 'toModeZero',
+        });
+      }
+    };
+
+    ipcRenderer.on('mode-change', handleMC);
+
+    const handleMC2 = () => {
       dispatch({
         type: 'toModeZero',
       });
     };
 
-    ipcRenderer.on('mode-change', handleMC);
+    ipcRenderer.on('et-to-mode-zero-renderer', handleMC2);
 
     const handleKeyDown = (e: any) => {
       if (((e.keyCode === 74 && e.ctrlKey) || e.keyCode === 40) && value === '') {
@@ -176,10 +189,17 @@ const App = () => {
   let tagH = result.length > 10 ? 10 : result.length;
 
   // 这里之后会有一个新标记区别是否 fullscreen (目前只有是全屏或不是全屏)
-  if (item && (item.type === 'PageGenerator' || item.type === 'Admin')) {
-    // do nothing
-  } else if (mode === -1 || (item && item.type === 'ScrollList')) {
+  if (item) {
+    if (item.type === 'PageGenerator' || item.type === 'Admin' || item.type === 'Demo') {
+      // do nothing
+    } else if (item.type === 'ScrollList') {
+      ipcRenderer.send('change-win', {
+        listHeight: tagH,
+      });
+    }
+  } else if (mode === -1) {
     ipcRenderer.send('change-win', {
+      type: 'to-mode-zero',
       listHeight: tagH,
     });
   } else {
@@ -207,6 +227,8 @@ const App = () => {
       return <AudioPlayer />;
     } else if (item && item.type === 'Admin') {
       return <Admin />;
+    } else if (item && item.type === 'Demo') {
+      return <Demo />;
     } else if (item && item.type === 'PageGenerator') {
       return <PageGenerator />;
     } else if (item && item.type === 'PictureWall') {

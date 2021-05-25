@@ -1,0 +1,337 @@
+#abcd {
+  width: 100px;
+  height: 100px;
+  background: #ff0;
+}
+
+/* components start 2021.04 */
+/* Form start */
+.hb-form-item {
+  margin-bottom: 18px;
+  display: flex;
+  display: -ms-flex;
+  vertical-align: top;
+}
+
+.hb-form-item-label {
+  height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+  min-width: 180px;
+  text-align: right;
+}
+
+.hb-form-item-explain {
+  display: none;
+  margin-top: 10px;
+  line-height: 22px;
+}
+
+.hb-form-item-explain-error {
+  color: #ff4d4f;
+}
+
+.hb-form-item-control.with-error .hb-form-item-explain {
+  display: block;
+}
+.hb-form-item-control.with-error .hb-input {
+  border-color: #ff4d4f;
+  box-shadow: 0 0 0 2px rgba(255, 144, 24, 0.2);
+}
+/* Form end */
+
+/* Input & Textarea start */
+.hb-textarea,
+.hb-input {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  padding: 4px 11px;
+  width: 100%;
+  min-width: 0;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 22px;
+  background-color: #fff;
+  background-image: none;
+  font-size: 14px;
+  font-variant: tabular-nums;
+  list-style: none;
+  -webkit-font-feature-settings: 'tnum';
+  font-feature-settings: 'tnum';
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+.hb-input {
+  height: 32px;
+}
+
+.hb-textarea-focused,
+.hb-textarea:focus,
+.hb-input-focused,
+.hb-input:focus {
+  outline: 0;
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.hb-input.is-disabled {
+  cursor: not-allowed;
+  user-select: none;
+}
+/* Input end */
+
+/* Modal start */
+.hb-modal-mask,
+.hb-modal-wrap {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.hb-modal-mask {
+  top: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.hb-modal-wrap {
+  top: 100px;
+  overflow: auto;
+  outline: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hb-modal {
+  position: relative;
+  top: 100px;
+  margin: 0 auto;
+  padding: 0 0 24px;
+  width: auto;
+  width: 300px;
+  min-height: 200px;
+  max-width: calc(100vw - 32px);
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.hb-modal-content {
+  position: relative;
+  border: 0;
+  border-radius: 2px;
+  background-color: #fff;
+  background-clip: padding-box;
+  // box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
+  pointer-events: auto;
+}
+
+.hb-modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.hb-modal-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 54px;
+  height: 54px;
+  background-color: #fff;
+  /* background-image: url(/img/common/btn-close.svg); */
+  background-position: center center;
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.hb-modal-title {
+  margin: 0;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+.hb-modal-body {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.5715;
+  word-wrap: break-word;
+}
+
+.hb-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  border-radius: 0 0 2px 2px;
+  padding: 10px 16px;
+  background: 0 0;
+  text-align: right;
+}
+
+.hb-modal-footer .hb-btn.cancel {
+  margin-right: 12px;
+}
+/* Modal end */
+
+/* hbFade(enter & leave) start */
+.hb-fade-enter,
+.hb-fade-leave {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+
+.hb-fade-enter.hb-fade-enter-active {
+  animation-play-state: running;
+}
+
+.hb-fade-leave.hb-fade-leave-active {
+  animation-play-state: running;
+  pointer-events: none;
+}
+
+.hb-fade-enter {
+  opacity: 0;
+}
+
+.hb-fade-enter,
+.hb-fade-leave {
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+/* hbFade(enter & leave) end */
+
+.hb-form-item-explain.hb-fade-enter.hb-fade-enter-active {
+  animation-name: hbFormItemFadeEnter;
+}
+
+.hb-form-item-explain.hb-fade-leave.hb-fade-leave-active {
+  animation-name: hbFormItemFadeLeave;
+}
+
+@keyframes hbFormItemFadeEnter {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes hbFormItemFadeLeave {
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+
+.hb-modal.hb-fade-enter.hb-fade-enter-active {
+  /* animation-name: hbModalFadeEnter; */
+  animation-name: hbModalZoomEnter;
+}
+
+.hb-modal.hb-fade-leave.hb-fade-leave-active {
+  /* animation-name: hbModalFadeLeave; */
+  animation-name: hbModalZoomLeave;
+}
+
+@keyframes hbModalFadeEnter {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes hbModalFadeLeave {
+  to {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+
+@keyframes hbModalZoomEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hbModalZoomLeave {
+  0% {
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+#app {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  min-width: 800px;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+$PD: $P + '-demo';
+
+// .#{$PD}-wrap {
+// }
+
+.#{$PD} {
+  padding: 20px;
+  background-color: $bgColor;
+
+  &.#{$P}-fade-enter.#{$P}-fade-enter-active {
+    animation-name: ETFadeEnter;
+  }
+
+  &.#{$P}-fade-leave.#{$P}-fade-leave-active {
+    animation-name: ETFadeLeave;
+  }
+}
+
+@keyframes ETFadeEnter {
+  0% {
+    transform: scale(0.86) translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ETFadeLeave {
+  to {
+    transform: scale(0.86) translateY(-20px);
+    opacity: 0;
+  }
+}

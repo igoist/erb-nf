@@ -43,12 +43,12 @@
         "dataIndex": "link"
       },
       "title": {
-        "dataIndex": "titile"
+        "dataIndex": "title"
       }
     },
     "name": "Douban Renting",
     "type": "ScrollList",
-    "visible": false
+    "visible": true
   },
   {
     "api": "/api/v1/v2ex/nodes/",
@@ -139,6 +139,23 @@
     },
     "name": "PictureWall",
     "type": "PictureWall",
+    "visible": true
+  },
+  {
+    "id": 9,
+    "index": 9,
+    "isSearchHidden": true,
+    "locked": true,
+    "metas": {
+      "link": {
+        "dataIndex": ""
+      },
+      "title": {
+        "dataIndex": ""
+      }
+    },
+    "name": "Demo",
+    "type": "Demo",
     "visible": true
   }
 ]

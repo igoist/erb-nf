@@ -45,15 +45,29 @@ const bindEvents = (obj) => {
           setTimeout(() => {
             win.setSize(width, height);
             win.center();
-          }, 60);
+            win.webContents.send('switch-full-screen-complete');
+          }, 32);
         } else {
           win.setSize(o.x, o.y);
         }
       }
+
+      if (arg.type === 'to-mode-zero') {
+        win.setSize(winWidth, winHeightUnit * (arg.listHeight + 1));
+        win.center();
+      }
     } else {
       win.setSize(winWidth, winHeightUnit * (arg.listHeight + 1));
     }
-    win.center();
+    // win.center();
+  });
+
+  ipcMain.on('et-to-mode-zero', (event, arg) => {
+    win.webContents.send('et-to-mode-zero-renderer');
+  });
+
+  ipcMain.on('et-fade-leave', (event, arg) => {
+    win.webContents.send('et-fade-leave-renderer');
   });
 
   ipcMain.on('get-list-item', async (event, arg) => {
@@ -150,6 +164,11 @@ const bindEvents = (obj) => {
 
   globalShortcut.register('Ctrl+M', () => {
     win.webContents.send('mode-change');
+  });
+
+  globalShortcut.register('Ctrl+N', () => {
+    win.center();
+    hideOrShowWin(true);
   });
 
   app.on('window-all-closed', () => {

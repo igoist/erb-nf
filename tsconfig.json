@@ -15,11 +15,15 @@
       "@Models/*": ["src/models/*"],
       "@Hooks": ["src/hooks/"],
       "@Hooks/*": ["src/hooks/*"],
-      "@Utils": ["src/util/"],
-      "@Utils/*": ["src/util/*"]
+      "@Utils": ["src/utils/"],
+      "@Utils/*": ["src/utils/*"],
+      "@PComponents": ["src/pages/Pinit/components/"],
+      "@PComponents/*": ["src/pages/Pinit/components/*"],
+      "@PModels": ["src/pages/Pinit/models/"],
+      "@PModels/*": ["src/pages/Pinit/models/*"],
+      "@PUtils": ["src/pages/Pinit/utils/"],
+      "@PUtils/*": ["src/pages/Pinit/utils/*"]
     }
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["./src/**/*"]
 }

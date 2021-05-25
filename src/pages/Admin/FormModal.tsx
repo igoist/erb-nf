@@ -29,16 +29,13 @@ const FormModal = (props: any) => {
           <Input />
         </Item>
 
-        {/* <Item label='Type' name='type' rules={[{ required: true, message: 'Item type please!' }]}>
-            <Input />
-          </Item> */}
-
         <Item label='Type' name='type' rules={[{ required: true, message: 'Item type please!' }]}>
           <Select placeholder='Select the item type' allowClear>
             <Option value='ScrollList'>ScrollList</Option>
             <Option value='Music'>Music</Option>
             <Option value='Search'>Search</Option>
             <Option value='Admin'>Admin</Option>
+            <Option value='Demo'>Demo</Option>
             <Option value='PageGenerator'>PageGenerator</Option>
             <Option value='PictureWall'>PictureWall</Option>
           </Select>

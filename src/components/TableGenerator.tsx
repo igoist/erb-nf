@@ -40,7 +40,7 @@ const TableGenerator = (config: any) => {
 
     // 这个 refresh ahooks 里根本查不到, umi hooks
     const { tableProps, refresh, search } = useAntdTable(returnGetTableData(api, dataFetch, handleRes), {
-      defaultPageSize: 20,
+      defaultPageSize: 10,
       form,
     });
 
