@@ -7,7 +7,6 @@ const { getCurrentDisplay } = utils.screen;
 const { BrowserWindow, globalShortcut } = electron;
 
 const bindEvents = (obj) => {
-  console.log(obj);
   const { app, ipcMain, win, winWidth, winHeightUnit, screen } = obj;
 
   let winFlag = true;
@@ -21,6 +20,25 @@ const bindEvents = (obj) => {
       winFlag = false;
     }
   };
+
+  // etWindow 相关
+  let etWindowIgnoreMouseEvents = false;
+
+  ipcMain.on('et-set-window', (event, arg) => {
+    const { type, payload } = arg;
+
+    if (type === 'et-ignore-mouse-event' && payload !== etWindowIgnoreMouseEvents) {
+      if (payload) {
+        etWindowIgnoreMouseEvents = true;
+        win.setIgnoreMouseEvents(true, {
+          forward: true,
+        });
+      } else {
+        etWindowIgnoreMouseEvents = false;
+        win.setIgnoreMouseEvents(false);
+      }
+    }
+  });
 
   /**
    * 应用发送该事件之后, 分情况调整窗口尺寸、位置

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ipcRenderer, remote } from 'electron';
-import { fuzzyMatch2 } from '@Utils';
+import { coreFn, fuzzyMatch2 } from '@Utils';
 // import SearchResult from './SearchResult';
 import AudioPlayer from './AudioPlayer';
 import VideoPlayer from './VideoPlayer';
@@ -14,6 +14,7 @@ const { useEffect, useRef } = React;
 
 const { ScrollListWithPagination, ScrollListWithKeyBoard } = ScrollList;
 
+const { debounce } = coreFn;
 const { fuzzyList, transformData } = fuzzyMatch2;
 
 const Loading = () => {
@@ -167,9 +168,26 @@ const App = () => {
 
     window.addEventListener('keydown', handleKeyDown);
 
+    const handleClickThrough = debounce((e: any) => {
+      if (e.target === document.documentElement) {
+        ipcRenderer.send('et-set-window', {
+          type: 'et-ignore-mouse-event',
+          payload: true,
+        });
+      } else {
+        ipcRenderer.send('et-set-window', {
+          type: 'et-ignore-mouse-event',
+          payload: false,
+        });
+      }
+    }, 100);
+
+    window.addEventListener('mousemove', handleClickThrough);
+
     return () => {
       ipcRenderer.removeListener('mode-change', handleMC);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('mousemove', handleClickThrough);
     };
   });
 
