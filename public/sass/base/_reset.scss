@@ -17,6 +17,11 @@ body {
   background: transparent;
   overflow: scroll;
   overflow: overlay;
+  pointer-events: none;
+}
+
+#app {
+  pointer-events: auto;
 }
 
 .#{$P}-scroll-forbidden,

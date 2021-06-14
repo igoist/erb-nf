@@ -1,0 +1,21 @@
+// size position 4 个参数必须传, url 和 repeat 看具体情况
+@mixin bg($w, $h, $pX, $pY, $url: '', $repeat: no-repeat) {
+  @if $url != '' {
+    background-image: url($IMGROOT + $url);
+  }
+  background-position: $pX $pY;
+  background-repeat: $repeat;
+  @if $w != '' {
+    background-size: $w $h;
+  } @else {
+    background-size: cover;
+  }
+}
+
+@function pow($base, $exponent) {
+  $result: 1;
+  @for $_ from 1 through $exponent {
+    $result: $result * $base;
+  }
+  @return $result;
+}

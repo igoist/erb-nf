@@ -11,7 +11,9 @@
   */
 
 @import 'abstracts/_variables';
+
 // @import 'mixin/_tabs';
+@import 'mixin/_tmp';
 
 @import 'base/_animation';
 @import 'base/_reset';
@@ -24,7 +26,7 @@
 // @import 'components/_button';
 // @import 'components/_coupon';
 // @import 'components/_course-material';
-// @import 'components/_modal';
+@import 'components/_modal';
 // @import 'components/_message';
 // @import 'components/_notification';
 // @import 'components/_pagination';
