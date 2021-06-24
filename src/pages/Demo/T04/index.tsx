@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useImmer } from 'use-immer';
 
-import img from './01.jpg';
+import { Popover } from 'antd';
+import * as methods from './tmp';
+import img from './02.jpg';
 
 const { useEffect, useState, useRef } = React;
-
-const cMM = (n: number) => {
-  return Math.min(Math.max(0, n), 255);
-};
 
 const TheCanvas = (props: any) => {
   const { pf } = props;
@@ -37,6 +35,12 @@ const TheCanvas = (props: any) => {
         let tmpCanvasData = tmpContext.getImageData(0, 0, width, height);
 
         if (tmpCanvasData && tmpCanvasData.data) {
+          let theProps = {
+            tmpCanvasData,
+            tmpContext,
+            width,
+            height,
+          };
           // console.log(tmpCanvasData);
           // tmpCanvasData = tmpCanvasData.data;
           // console.log(tmpCanvasData.length);
@@ -54,39 +58,8 @@ const TheCanvas = (props: any) => {
           //   }
           // }
 
-          for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
-              let point = y * width * 4 + x * 4 + 0;
-              let tmpV;
-
-              tmpCanvasData.data[point + 1] = 0;
-              tmpCanvasData.data[point + 2] = 0;
-
-              if (tmpCanvasData.data[point] > 127) {
-                tmpV = tmpCanvasData.data[point] - 255;
-                tmpCanvasData.data[point] = 255;
-                // tmpCanvasData.data[point + 1] = tmpCanvasData.data[point + 1] / 2;
-                // tmpCanvasData.data[point + 2] = tmpCanvasData.data[point + 2] / 2;
-              } else {
-                tmpV = tmpCanvasData.data[point];
-                tmpCanvasData.data[point] = 0;
-              }
-
-              let a = (tmpV * 7) / 16;
-              let b = (tmpV * 1) / 16;
-              let c = (tmpV * 5) / 16;
-              let d = (tmpV * 3) / 16;
-
-              if (y !== height - 1 && x !== 0 && x !== width - 1) {
-                tmpCanvasData.data[y * width * 4 + (x + 1) * 4 + 0] = cMM(tmpCanvasData.data[y * width * 4 + (x + 1) * 4 + 0] + a);
-                tmpCanvasData.data[(y + 1) * width * 4 + (x + 1) * 4 + 0] = cMM(tmpCanvasData.data[(y + 1) * width * 4 + (x + 1) * 4 + 0] + b);
-                tmpCanvasData.data[(y + 1) * width * 4 + (x + 0) * 4 + 0] = cMM(tmpCanvasData.data[(y + 1) * width * 4 + (x + 0) * 4 + 0] + c);
-                tmpCanvasData.data[(y + 1) * width * 4 + (x - 1) * 4 + 0] = cMM(tmpCanvasData.data[(y + 1) * width * 4 + (x - 1) * 4 + 0] + d);
-              }
-            }
-          }
-
-          tmpContext.putImageData(tmpCanvasData, 0, 0);
+          methods.useDither(theProps);
+          methods.useGrey(theProps);
         }
       },
       false,
@@ -129,8 +102,18 @@ const AppUseImmerTest = (props: any) => {
       <div className={`${pf}-left`}>
         <img src={img} />
 
-        <div className={`${pf}-btn`} onClick={handle1}>
-          Toggle
+        <Popover>
+          <div className={`${pf}-btn`} onClick={handle1}>
+            Toggle
+          </div>
+        </Popover>
+
+        <div>
+          <div style={{ float: 'left', width: '100px', lineHeight: '18px' }}>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</div>
+          {/* <div style={{ overflow: 'auto' }}> */}
+          <div style={{}}>
+            哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈
+          </div>
         </div>
       </div>
 
