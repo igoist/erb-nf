@@ -1,26 +1,58 @@
 $PF: $P + '-fade';
 
-.#{$PF}-enter,
-.#{$PF}-leave {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  animation-play-state: paused;
-}
+@include ETAnimationMixin($PF);
 
 .#{$PF}-enter.#{$PF}-enter-active {
-  animation-play-state: running;
+  animation-name: ETFadeEnter;
 }
 
 .#{$PF}-leave.#{$PF}-leave-active {
-  animation-play-state: running;
-  pointer-events: none;
+  animation-name: ETFadeLeave;
 }
 
-.#{$PF}-enter,
-.#{$PF}-leave {
-  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+$PZ: $P + '-zoom';
+
+@include ETAnimationMixin($PZ);
+
+/**
+ * animation part
+ * ETFadeEnter
+ * ETFadeLeave
+ */
+@keyframes ETFadeEnter {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  // 0% {
+  //   transform: scale(0.2);
+  //   opacity: 0;
+  // }
+
+  // to {
+  //   transform: scale(1);
+  //   opacity: 1;
+  // }
 }
 
-.#{$PF}-enter {
-  opacity: 0;
+@keyframes ETFadeLeave {
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  // 0% {
+  //   transform: scale(1);
+  // }
+
+  // to {
+  //   transform: scale(0.2);
+  //   opacity: 0;
+  // }
 }

@@ -1,0 +1,158 @@
+$PB: $P + '-btn';
+
+.#{$PB} {
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+
+  &.is-bounce:not(.is-disabled),
+  &.bounce:not(.is-disabled) {
+    transition: transform $anime-duration-s ease-in-out;
+
+    &:active {
+      transform: scale(0.88);
+    }
+  }
+}
+
+@mixin ETBtnNeon($color) {
+  border-color: $color;
+  box-shadow: 0 0 15px 2px $color, $color 0 0 11px 3px inset;
+  &:hover {
+    box-shadow: 0 0 20px 3px $color, $color 0 0 24px 5px inset;
+  }
+}
+
+.#{$PB}.type-neon {
+  border: 1px solid;
+  border-radius: 2px;
+  height: 32px;
+  line-height: 30px;
+  color: #fff;
+  text-align: center;
+
+  &.red {
+    @include ETBtnNeon($theme-red);
+  }
+
+  &.orange {
+    @include ETBtnNeon($theme-orange);
+  }
+
+  &.yellow {
+    @include ETBtnNeon($theme-yellow);
+  }
+
+  &.green {
+    @include ETBtnNeon($theme-green);
+  }
+
+  &.blue {
+    @include ETBtnNeon($theme-blue);
+  }
+
+  &.purple {
+    @include ETBtnNeon($theme-purple);
+  }
+}
+
+@mixin ETBtnNeon2($color) {
+  border-color: $color;
+  box-shadow: inset 0 0 1em $color, 0 0 1em $color;
+
+  &:hover {
+    background-color: $color;
+    box-shadow: inset 0 0 0 $color, 0 0 1.5em $color;
+  }
+}
+
+.#{$PB}.type-neon2 {
+  border: 1px solid;
+  border-radius: 0;
+  height: 32px;
+  line-height: 30px;
+  color: #fff;
+  text-align: center;
+
+  &.red {
+    @include ETBtnNeon2($theme-red);
+  }
+
+  &.orange {
+    @include ETBtnNeon2($theme-orange);
+  }
+
+  &.yellow {
+    @include ETBtnNeon2($theme-yellow);
+  }
+
+  &.green {
+    @include ETBtnNeon2($theme-green);
+  }
+
+  &.blue {
+    @include ETBtnNeon2($theme-blue);
+  }
+
+  &.purple {
+    @include ETBtnNeon2($theme-purple);
+  }
+}
+
+@mixin ETBtnGradient($color, $color2) {
+  border-color: $color;
+  background-image: linear-gradient(135deg, $color2 0%, $color 100%);
+}
+
+.#{$PB}.type-gradient {
+  position: relative;
+  border: none;
+  border-radius: 2px;
+  padding: 0 16px;
+  height: 32px;
+  line-height: 32px;
+  overflow: hidden;
+
+  &::before {
+    --size: 0;
+    content: '';
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    // background: radial-gradient(circle closest-side, #a3b1f1, transparent);
+    background: radial-gradient(circle closest-side, #fff, transparent);
+    opacity: 0.7;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease, left 0s, top 0s;
+  }
+
+  &:hover::before {
+    --size: 200px;
+  }
+
+  &.red {
+    @include ETBtnGradient($theme-red, $theme-purple);
+  }
+
+  &.orange {
+    @include ETBtnGradient($theme-orange, $theme-red);
+  }
+
+  &.yellow {
+    @include ETBtnGradient($theme-yellow, $theme-orange);
+  }
+
+  &.green {
+    @include ETBtnGradient($theme-green, $theme-yellow);
+  }
+
+  &.blue {
+    @include ETBtnGradient($theme-blue, $theme-green);
+  }
+
+  &.purple {
+    @include ETBtnGradient($theme-purple, $theme-blue);
+  }
+}

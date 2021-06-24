@@ -12,10 +12,43 @@
   }
 }
 
+@mixin textOverflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @function pow($base, $exponent) {
   $result: 1;
   @for $_ from 1 through $exponent {
     $result: $result * $base;
   }
   @return $result;
+}
+
+@mixin ETAnimationMixin($pf) {
+  .#{$pf}-enter,
+  .#{$pf}-leave {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+
+  .#{$pf}-enter.#{$pf}-enter-active {
+    animation-play-state: running;
+  }
+
+  .#{$pf}-leave.#{$pf}-leave-active {
+    animation-play-state: running;
+    pointer-events: none;
+  }
+
+  .#{$pf}-enter,
+  .#{$pf}-leave {
+    animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .#{$pf}-enter {
+    opacity: 0;
+  }
 }

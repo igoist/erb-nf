@@ -1,3 +1,20 @@
 $P: 'et';
 
 $bgColor: #333333;
+
+// small 手机、小平板
+$mediaS: 768px;
+// small 以上
+$mediaM: 769px;
+
+// 主题色
+$theme-red: #f05050;
+$theme-orange: #ffa500;
+$theme-yellow: #ffd52e;
+$theme-green: #49dd8e;
+$theme-blue: #58b3ff;
+$theme-purple: #ae99ff;
+
+$anime-duration-l: 0.36s;
+$anime-duration-m: 0.24s;
+$anime-duration-s: 0.12s;

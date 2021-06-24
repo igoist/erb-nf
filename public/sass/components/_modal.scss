@@ -3,17 +3,17 @@ $PM: $P + '-modal';
 .#{$PM}-mask,
 .#{$PM}-wrap {
   position: fixed;
+  top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 160;
-  pointer-events: none;
 }
 
 .#{$PM}-mask {
-  top: 0;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
 
   &.#{$P}-fade-enter.#{$P}-fade-enter-active {
     animation-name: ETModalMaskFadeEnter;
@@ -45,10 +45,10 @@ $PM: $P + '-modal';
 }
 
 .#{$PM}-wrap {
-  top: 100px;
   overflow: auto;
   outline: 0;
   -webkit-overflow-scrolling: touch;
+  pointer-events: none;
 }
 
 .#{$PM} {
@@ -60,13 +60,13 @@ $PM: $P + '-modal';
   width: 300px;
   min-height: 200px;
   max-width: calc(100vw - 32px);
-  background-color: #fff;
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
   font-variant: tabular-nums;
   box-sizing: border-box;
   pointer-events: none;
 
+  // fade
   &.#{$P}-fade-enter.#{$P}-fade-enter-active {
     animation-name: ETModalFadeEnter;
   }
@@ -74,43 +74,75 @@ $PM: $P + '-modal';
   &.#{$P}-fade-leave.#{$P}-fade-leave-active {
     animation-name: ETModalFadeLeave;
   }
+
+  // zoom
+  &.#{$P}-zoom-enter.#{$P}-zoom-enter-active {
+    animation-name: ETModalZoomEnter;
+  }
+
+  &.#{$P}-zoom-leave.#{$P}-zoom-leave-active {
+    animation-name: ETModalZoomLeave;
+  }
 }
 
 @keyframes ETModalFadeEnter {
-  // 0% {
-  //   transform: translateY(-10px);
-  //   opacity: 0;
-  // }
-
-  // to {
-  //   transform: translateY(0);
-  //   opacity: 1;
-  // }
-
   0% {
-    transform: scale(0.2);
+    transform: translateY(-10px);
     opacity: 0;
   }
 
   to {
-    transform: scale(1);
+    transform: translateY(0);
     opacity: 1;
   }
+
+  // 0% {
+  //   transform: scale(0.2);
+  //   opacity: 0;
+  // }
+
+  // to {
+  //   transform: scale(1);
+  //   opacity: 1;
+  // }
 }
 
 @keyframes ETModalFadeLeave {
-  // to {
-  //   transform: translateY(-10px);
-  //   opacity: 0;
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+
+  // 0% {
+  //   transform: scale(1);
   // }
 
+  // to {
+  //   transform: scale(0.2);
+  //   opacity: 0;
+  // }
+}
+
+@keyframes ETModalZoomEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ETModalZoomLeave {
   0% {
     transform: scale(1);
   }
 
   to {
-    transform: scale(0.2);
     opacity: 0;
+    transform: scale(0.2);
   }
 }
 
@@ -172,4 +204,24 @@ $PM: $P + '-modal';
 
 .#{$PM}-footer .hb-btn.cancel {
   margin-right: 12px;
+}
+
+.#{$PM}-btn {
+  display: inline-block;
+  border: none;
+  border-radius: 2px;
+  padding: 0 16px;
+  height: 32px;
+  line-height: 32px;
+
+  &.#{$PM}-btn-cancel {
+    margin-right: 12px;
+    border: 1px solid #d9d9d9;
+    line-height: 30px;
+  }
+
+  &.#{$PM}-btn-submit {
+    background-color: $theme-red;
+    color: #fff;
+  }
 }

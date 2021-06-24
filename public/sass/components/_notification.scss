@@ -1,0 +1,105 @@
+$PN: $P + '-notification';
+
+.#{$PN}-wrap {
+  position: fixed;
+  margin-right: 24px;
+  line-height: 1.5715;
+  list-style: none;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  -webkit-font-feature-settings: 'tnum';
+  font-feature-settings: 'tnum';
+  z-index: 90;
+}
+
+.#{$PN}-wrap.#{$PN}-wrap-top-right {
+  top: 48px;
+  right: 0;
+  bottom: auto;
+}
+
+.#{$PN} {
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 16px;
+  margin-left: auto;
+  border-radius: 8px;
+  padding: 18px 20px;
+  max-width: 312px;
+  background: #fff;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.24s ease-in-out;
+
+  &.#{$P}-fade-enter.#{$P}-fade-enter-active {
+    animation-name: HBNotificationFadeEnter;
+  }
+
+  &.#{$P}-fade-leave.#{$P}-fade-leave-active {
+    animation-name: HBNotificationFadeLeave;
+  }
+}
+
+.#{$PN}-content {
+  font-family: -apple-system, 'Helvetica Neue', Tahoma, sans-serif;
+}
+
+.#{$PN}-title {
+  margin-bottom: 10px;
+  padding-right: 8px;
+  max-height: 40px;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.#{$PN}-desc {
+  max-height: 54px;
+  line-height: 18px;
+  color: #7b7b7b;
+  font-size: 14px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.#{$PN}-close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 32px;
+  height: 32px;
+  background-color: #0f0;
+  // background-image: url(/img/icons/ic-#{$PN}-close.svg);
+  // background-position: center center;
+  // background-repeat: no-repeat;
+  background-size: 16px 16px;
+}
+
+@keyframes HBNotificationFadeEnter {
+  0% {
+    left: 110%;
+    opacity: 0;
+  }
+
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes HBNotificationFadeLeave {
+  0% {
+    max-height: 150px;
+    margin-bottom: 16px;
+    opacity: 1;
+  }
+
+  to {
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+}

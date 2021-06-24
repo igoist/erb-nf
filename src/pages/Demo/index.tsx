@@ -9,6 +9,8 @@ import F from './F';
 import T from './T';
 import T02 from './T02';
 import T03 from './T03';
+import T04 from './T04';
+import T05 from './T05';
 import { dom } from '@Utils';
 
 const { useEffect } = React;
@@ -18,22 +20,34 @@ const { Q, removeClass, addClass, ETFade, scrollSmothlyTo } = dom;
 const Demo = () => {
   const pf = 'et-demo';
 
+  const commonTabProps = {
+    pf,
+  };
+
   const tabsArr = [
     {
       name: 'Tab F',
-      component: <F />,
+      component: <F {...commonTabProps} />,
     },
     {
       name: 'Tab T',
-      component: <T />,
+      component: <T {...commonTabProps} />,
     },
     {
       name: 'Tab T02',
-      component: <T02 />,
+      component: <T02 {...commonTabProps} />,
     },
     {
       name: 'Tab T03',
-      component: <T03 />,
+      component: <T03 {...commonTabProps} />,
+    },
+    {
+      name: 'Tab T04',
+      component: <T04 {...commonTabProps} />,
+    },
+    {
+      name: 'Tab T05-demo',
+      component: <T05 />,
     },
   ];
 
@@ -85,27 +99,33 @@ const Demo = () => {
       let wrap = Q(`.${pf}-wrap`);
       let w = Q(`.${pf}`);
 
-      removeClass('is-hidden', wrap);
+      setTimeout(() => {
+        removeClass('is-hidden', wrap);
 
-      ETFade({
-        el: w,
-        isEnter: true,
-      });
+        ETFade({
+          el: w,
+          isEnter: true,
+        });
+      }, 16);
     });
 
     ipcRenderer.once('et-fade-leave-renderer', () => {
       let wrap = Q(`.${pf}-wrap`);
       let w = Q(`.${pf}`);
 
-      ETFade({
-        el: w,
-        callback: () => {
-          addClass('is-hidden', wrap);
-          // ReactDOM.unmountComponentAtNode(wrap);
+      setTimeout(() => {
+        ETFade({
+          el: w,
+          callback: () => {
+            addClass('is-hidden', wrap);
+            // ReactDOM.unmountComponentAtNode(wrap);
 
-          ipcRenderer.send('et-to-mode-zero');
-        },
-      });
+            setTimeout(() => {
+              ipcRenderer.send('et-to-mode-zero');
+            }, 16);
+          },
+        });
+      }, 16);
     });
 
     return () => {

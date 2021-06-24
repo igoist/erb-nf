@@ -201,6 +201,7 @@
 // }
 
 $PD: $P + '-demo';
+$PB: $P + '-btn';
 
 // .#{$PD}-wrap {
 // }
@@ -222,24 +223,24 @@ $PD: $P + '-demo';
   min-height: 80vh;
 }
 
-@keyframes ETFadeEnter {
-  0% {
-    transform: scale(0.86) translateY(-20px);
-    opacity: 0;
-  }
+// @keyframes ETFadeEnter {
+//   0% {
+//     transform: scale(0.86) translateY(-20px);
+//     opacity: 0;
+//   }
 
-  to {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
-}
+//   to {
+//     transform: scale(1) translateY(0);
+//     opacity: 1;
+//   }
+// }
 
-@keyframes ETFadeLeave {
-  to {
-    transform: scale(0.86) translateY(-20px);
-    opacity: 0;
-  }
-}
+// @keyframes ETFadeLeave {
+//   to {
+//     transform: scale(0.86) translateY(-20px);
+//     opacity: 0;
+//   }
+// }
 
 $PIP: $P + '-img-processing';
 
@@ -257,4 +258,92 @@ $PIP: $P + '-img-processing';
   float: right;
   width: 46vw;
   background-color: #33f;
+}
+
+// ............
+
+.#{$PD} {
+  margin-bottom: 76px;
+  background-color: #333;
+
+  .#{$PB} {
+    color: #fff;
+  }
+
+  .#{$PB}.type-neon2,
+  .#{$PB}.type-neon {
+    &.sm {
+      padding: 0 15px;
+      font-size: 10px;
+      height: 24px;
+      line-height: 22px;
+    }
+
+    &.lg {
+      padding: 0 30px;
+      height: 40px;
+      line-height: 38px;
+      font-size: 16px;
+    }
+  }
+
+  .#{$PB}.type-gradient {
+    &.sm {
+      padding: 0 15px;
+      font-size: 10px;
+      border-radius: 2px;
+      height: 24px;
+      line-height: 24px;
+    }
+
+    &.lg {
+      padding: 0 30px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+  }
+}
+
+.#{$PD}-btn-box-row,
+.#{$PD}-btn-box {
+  display: grid;
+}
+
+.#{$PD}-btn-box-item {
+  padding: 12px 20px;
+  background: #333;
+  border: 1px solid #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+@media (min-width: $mediaM) {
+  .#{$PD}-btn-box {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(126.66667px, auto);
+    grid-gap: 10px;
+  }
+
+  .#{$PD}-btn-box-row {
+    grid-column: 1 / 7;
+    grid-gap: 10px;
+    grid-template-columns: repeat(6, 1fr);
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: $mediaS) {
+  .#{$PD}-btn-box {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    grid-gap: 5px;
+  }
+
+  .#{$PD}-btn-box-row {
+    grid-column: 1 / 4;
+    grid-gap: 5px;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 5px;
+  }
 }

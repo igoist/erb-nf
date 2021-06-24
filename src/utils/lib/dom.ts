@@ -1,13 +1,18 @@
-export const htmlToElement = (html: string) => {
-  let template = document.createElement('template');
-  html = html.trim();
-  template.innerHTML = html;
-  return template.content.firstChild;
+export const CE = (eTag: string) => {
+  return document.createElement(eTag);
 };
 
-export const Q = (s: string) => document.querySelector(s);
+export const Q = (s: string, el?: any) => {
+  const t = el ? el : document;
 
-export const QA = (s: string) => document.querySelectorAll(s);
+  return t.querySelector(s);
+};
+
+export const QA = (s: string, el?: any) => {
+  const t = el ? el : document;
+
+  return t.querySelectorAll(s);
+};
 
 export const hasClass = (className: string, el: any) => {
   if (el) {
@@ -86,6 +91,53 @@ export const ETFade = (config: ETAnimationConfigType) => {
   config.name = 'fade';
 
   ETAnimation(config);
+};
+
+export const ETZoom = (config: ETAnimationConfigType) => {
+  config.name = 'zoom';
+
+  ETAnimation(config);
+};
+
+export const getScroll = (w: any, top?: any) => {
+  var ret = w['page' + (top ? 'Y' : 'X') + 'Offset'];
+  var method = 'scroll' + (top ? 'Top' : 'Left');
+  if (typeof ret !== 'number') {
+    var d = w.document;
+    ret = d.documentElement[method];
+    if (typeof ret !== 'number') {
+      ret = d.body[method];
+    }
+  }
+  return ret;
+};
+
+export const setTransformOrigin = (node: any, value: any) => {
+  var style = node.style;
+  ['Webkit', 'Moz', 'Ms', 'ms'].forEach(function (prefix) {
+    style[prefix + 'TransformOrigin'] = value;
+  });
+  style['transformOrigin'] = value;
+};
+
+export const offset = (el: any) => {
+  var rect = el.getBoundingClientRect();
+  var pos = {
+    left: rect.left,
+    top: rect.top,
+  };
+  var doc = el.ownerDocument;
+  var w = doc.defaultView || doc.parentWindow;
+  pos.left += getScroll(w);
+  pos.top += getScroll(w, true);
+  return pos;
+};
+
+export const htmlToElement = (html: string) => {
+  let template = document.createElement('template');
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
 };
 
 /**
